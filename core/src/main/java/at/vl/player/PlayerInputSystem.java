@@ -68,6 +68,8 @@ public class PlayerInputSystem extends IteratingSystem {
         facing = facingMapper.get(entityId);
         animator = animatorMapper.get(entityId);
 
+        currentSpeed = speed;
+
         // For testing purposes
         if (Gdx.input.isKeyPressed(Input.Keys.R)) {
             collider.rect.x = 1f;
@@ -78,6 +80,8 @@ public class PlayerInputSystem extends IteratingSystem {
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             if (!(moveX >= speed))  {
                 moveX += currentSpeed / startSpeed;
+            } else {
+                moveX = speed;
             }
             facing.lookingRight = true;
         }
@@ -85,6 +89,8 @@ public class PlayerInputSystem extends IteratingSystem {
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             if (!(moveX <= -speed)) {
                 moveX -= currentSpeed / startSpeed;
+            } else {
+                moveX = -speed;
             }
             facing.lookingRight = false;
         }
@@ -147,13 +153,7 @@ public class PlayerInputSystem extends IteratingSystem {
 
         // Count down landing timer
         if (landStateTime > 0f) {
-            if (landMovementLock) {
-                moveX = 0f;
-                currentSpeed = 0f;
-            }
             landStateTime -= world.getDelta();
-        } else {
-            currentSpeed = speed;
         }
 
         // Save grounded state for next frame
