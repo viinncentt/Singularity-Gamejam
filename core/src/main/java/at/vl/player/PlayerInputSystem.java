@@ -105,7 +105,7 @@ public class PlayerInputSystem extends IteratingSystem {
         rb.movedX = moveX != 0f;
 
         // Jumping
-        if (Gdx.input.isKeyJustPressed(Input.Keys.W) && rb.grounded) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.W) && rb.grounded && !(landStateTime > 0f)) {
             rb.velocity.y = baseJumpForce; // always applied, no matter what
             rb.movedY = true;
             isJumping = true;
