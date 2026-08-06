@@ -11,5 +11,8 @@
 
   "BaseJumpForce": "3",
   "MaxJumpForce": "8",
-  "MaxJumpTime": "0.1"
+  "MaxJumpTime": "0.1",
+
+  "LandMovementLock": "true",
+  "LandDuration": "30"
 }

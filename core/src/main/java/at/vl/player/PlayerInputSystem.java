@@ -25,10 +25,10 @@ public class PlayerInputSystem extends IteratingSystem {
     private Facing facing;
     private Animator animator;
 
-    private float speed;
+    private final float speed;
     private float currentSpeed;
-    private float startSpeed;
-    private float stopSpeed;
+    private final float startSpeed;
+    private final float stopSpeed;
 
     private float moveX;
 
@@ -38,7 +38,13 @@ public class PlayerInputSystem extends IteratingSystem {
     private float maxJumpForce;
 
     private float jumpHoldTime = 0f;
-    private float maxJumpTime;
+    private final float maxJumpTime;
+
+    // Landing
+    private boolean wasGrounded;
+    private float landStateTime = 0f;
+    private final float landDuration;
+    private final boolean landMovementLock;
 
     public PlayerInputSystem() {
         super(Aspect.all(PlayerInput.class, RigidBody.class, Collider.class, Animator.class));
@@ -50,6 +56,9 @@ public class PlayerInputSystem extends IteratingSystem {
         baseJumpForce = JsonHelper.getConfigValue().getFloat("BaseJumpForce");
         maxJumpForce = JsonHelper.getConfigValue().getFloat("MaxJumpForce");
         maxJumpTime = JsonHelper.getConfigValue().getFloat("MaxJumpTime");
+
+        landDuration = JsonHelper.getConfigValue().getFloat("LandDuration") / 100f;
+        landMovementLock = JsonHelper.getConfigValue().getBoolean("LandMovementLock");
     }
 
     @Override
@@ -58,10 +67,6 @@ public class PlayerInputSystem extends IteratingSystem {
         rb = rigidBodyMapper.get(entityId);
         facing = facingMapper.get(entityId);
         animator = animatorMapper.get(entityId);
-
-        // Assume player is idle unless specified otherwise
-        animator.currentState = State.IDLE;
-        currentSpeed = speed;
 
         // For testing purposes
         if (Gdx.input.isKeyPressed(Input.Keys.R)) {
@@ -72,27 +77,25 @@ public class PlayerInputSystem extends IteratingSystem {
         // Walking
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             if (!(moveX >= speed))  {
-                moveX += speed / startSpeed;
+                moveX += currentSpeed / startSpeed;
             }
             facing.lookingRight = true;
-            animator.currentState = State.WALKING;
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             if (!(moveX <= -speed)) {
-                moveX -= speed / startSpeed;
+                moveX -= currentSpeed / startSpeed;
             }
             facing.lookingRight = false;
-            animator.currentState = State.WALKING;
         }
 
         // If no movement key pressed reset movement
         if (!Gdx.input.isKeyPressed(Input.Keys.A) && !Gdx.input.isKeyPressed(Input.Keys.D)) {
             if (moveX > 0) {
-                moveX -= speed / stopSpeed;
+                moveX -= currentSpeed / stopSpeed;
                 if (moveX < 0) moveX = 0;
             } else if (moveX < 0) {
-                moveX += speed / stopSpeed;
+                moveX += currentSpeed / stopSpeed;
                 if (moveX > 0) moveX = 0;
             }
         }
@@ -131,24 +134,48 @@ public class PlayerInputSystem extends IteratingSystem {
 
         // Falling
         if (!rb.grounded && rb.velocity.y < 0f) {
-
+            animator.currentState = State.FALLING;
             rb.fasterGravity = true;
         } else {
             rb.fasterGravity = false;
         }
 
+        // Landing
+        if (rb.grounded && !wasGrounded) {
+            landStateTime = landDuration;
+        }
+
+        // Count down landing timer
+        if (landStateTime > 0f) {
+            if (landMovementLock) {
+                moveX = 0f;
+                currentSpeed = 0f;
+            }
+            landStateTime -= world.getDelta();
+        } else {
+            currentSpeed = speed;
+        }
+
+        // Save grounded state for next frame
+        wasGrounded = rb.grounded;
+
         // Abilities
 
+        // State Handler
         stateHandler();
     }
 
     private void stateHandler() {
-        if (rb.velocity.y > 0 && !rb.grounded) {
+        if (landStateTime > 0f) {
+            animator.currentState = State.LANDING;
+        } else if (isJumping || (!rb.grounded && rb.velocity.y > 0f)) {
             animator.currentState = State.JUMPING;
-        }
-
-        if (rb.velocity.y < 0 && !rb.grounded) {
+        } else if (!rb.grounded && rb.velocity.y < 0f) {
             animator.currentState = State.FALLING;
+        } else if (moveX != 0f) {
+            animator.currentState = State.WALKING;
+        } else {
+            animator.currentState = State.IDLE;
         }
     }
 }
