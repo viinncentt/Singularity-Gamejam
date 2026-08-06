@@ -10,9 +10,9 @@
   "PlayerWalkingAnimationSpeed": "10",
 
   "BaseJumpForce": "3",
-  "MaxJumpForce": "5",
-  "MaxJumpTime": "0.3",
+  "MaxJumpForce": "7",
+  "MaxJumpTime": "0.1",
 
-  "LandMovementLock": "true",
+  "LandMovementLock": "false",
   "LandDuration": "7"
 }
