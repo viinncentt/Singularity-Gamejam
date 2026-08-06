@@ -1,0 +1,20 @@
+Walking.png
+size: 448, 64
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+JOHNNYWALK1
+  bounds: 0, 0, 64, 64
+JOHNNYWALK2
+  bounds: 64, 0, 64, 64
+JOHNNYWALK3
+  bounds: 128, 0, 64, 64
+JOHNNYWALK4
+  bounds: 192, 0, 64, 64
+JOHNNYWALK5
+  bounds: 256, 0, 64, 64
+JOHNNYWALK6
+  bounds: 320, 0, 64, 64
+JOHNNYWALK7
+  bounds: 384, 0, 64, 64

@@ -1,3 +1,15 @@
 {
+  "GravityStrength": "20",
+  "TileSize": "32",
+  "WorldWidth": "1280",
+  "WorldHeight": "720",
 
+  "PlayerSpeed": "4",
+  "StartSpeed": "8",
+  "StopSpeed": "5",
+  "PlayerWalkingAnimationSpeed": "10",
+
+  "BaseJumpForce": "3",
+  "MaxJumpForce": "8",
+  "MaxJumpTime": "0.1"
 }

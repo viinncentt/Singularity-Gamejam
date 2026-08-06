@@ -1,4 +1,4 @@
-package at.vl.player;
+package at.vl.systems;
 
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;

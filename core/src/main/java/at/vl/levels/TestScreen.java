@@ -4,16 +4,19 @@ import com.artemis.World;
 import com.artemis.WorldConfiguration;
 import com.artemis.WorldConfigurationBuilder;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import at.vl.Main;
-import at.vl.collisionsystem.CollisionListener;
+import at.vl.collisionsystem.CollisionSystem;
 import at.vl.collisionsystem.GravitySystem;
 import at.vl.ecs.SpawningSystem;
 import at.vl.ecs.debugging.ColliderRenderer;
-import at.vl.player.MovementSystem;
+import at.vl.ecs.debugging.DebugOverlay;
+import at.vl.systems.MovementSystem;
+import at.vl.player.PlayerAnimationSystem;
 import at.vl.player.PlayerInputSystem;
 
 public class TestScreen extends GameScreen {
@@ -23,15 +26,19 @@ public class TestScreen extends GameScreen {
     private World world;
     private WorldConfiguration config;
     private SpawningSystem spawner;
+
     // Debugging
     private ShapeRenderer shapeRenderer;
+
+    private PlayerAnimationSystem playerAnimationSystem;
 
     public TestScreen(Main main) {
         super(main);
         shapeRenderer = new ShapeRenderer();
 
+        playerAnimationSystem = new PlayerAnimationSystem();
         config = new WorldConfigurationBuilder().with(new PlayerInputSystem(), new MovementSystem(), new SpawningSystem(),
-            new CollisionListener(), new GravitySystem(),
+            new CollisionSystem(), new GravitySystem(), playerAnimationSystem, new DebugOverlay(),
             new ColliderRenderer(camera, shapeRenderer)).build();
 
         world = new World(config);
@@ -39,8 +46,6 @@ public class TestScreen extends GameScreen {
         spawner = world.getSystem(SpawningSystem.class);
         spawner.spawnGround(0f, 0f, 15f, 1f);
         spawner.spawnPlayer(1f, 10f);
-
-        tex = new Texture(Gdx.files.internal("libgdx.png"));
     }
 
     @Override
@@ -53,7 +58,7 @@ public class TestScreen extends GameScreen {
         fitViewport.apply();
         camera.update();
         batch.setProjectionMatrix(camera.combined);
-        ScreenUtils.clear(0, 0, 0, 1);
+        ScreenUtils.clear(0, 0.31f, 0.31f, 1);
 
         // Artemis ODB
         world.setDelta(delta);
@@ -61,10 +66,9 @@ public class TestScreen extends GameScreen {
 
         // Draw
         batch.begin();
-        //batch.draw(tex, 0f, 0f, camera.viewportWidth, camera.viewportHeight);
-        //batch.draw(tex, -5f, 0f, 10f, 10f);
-
+        playerAnimationSystem.render(batch);
         batch.end();
+
     }
 
 

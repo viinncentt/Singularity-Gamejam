@@ -21,6 +21,8 @@ gradle-app.setting
 hs_err_pid*
 .attach_pid*
 
+assets/temp/
+
 ## Android:
 /android/libs/armeabi-v7a/
 /android/libs/arm64-v8a/
