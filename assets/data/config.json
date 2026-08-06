@@ -14,5 +14,5 @@
   "MaxJumpTime": "0.3",
 
   "LandMovementLock": "true",
-  "LandDuration": "30"
+  "LandDuration": "7"
 }
