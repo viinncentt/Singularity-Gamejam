@@ -54,11 +54,11 @@ public class PlayerAnimationSystem extends IteratingSystem {
         JUMP_ANIMATION = new TextureRegion(temp);
 
         // Fall
-        temp = new Texture(Gdx.files.internal("player/PlayerIdle.png"));
+        temp = new Texture(Gdx.files.internal("player/PlayerFall.png"));
         FALL_ANIMATION = new TextureRegion(temp);
 
         // Land
-        temp = new Texture(Gdx.files.internal("player/PlayerIdle.png"));
+        temp = new Texture(Gdx.files.internal("player/PlayerLand.png"));
         LAND_ANIMATION = new TextureRegion(temp);
     }
 
