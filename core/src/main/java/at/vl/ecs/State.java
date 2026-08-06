@@ -1,0 +1,5 @@
+package at.vl.ecs;
+
+public enum State {
+    IDLE, WALKING, JUMPING, FALLING
+}
