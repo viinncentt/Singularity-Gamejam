@@ -1,0 +1,10 @@
+Shooting.png
+size: 132, 66
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+JOHNNYSHOOT1
+  bounds: 1, 1, 64, 64
+JOHNNYSHOOT2
+  bounds: 67, 1, 64, 64

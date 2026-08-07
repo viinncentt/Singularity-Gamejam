@@ -1,0 +1,14 @@
+Walking.png
+size: 264, 66
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+ENEMYNUMBER1
+  bounds: 1, 1, 64, 64
+ENEMYNUMBER2
+  bounds: 67, 1, 64, 64
+ENEMYNUMBER3
+  bounds: 133, 1, 64, 64
+ENEMYNUMBER4
+  bounds: 199, 1, 64, 64

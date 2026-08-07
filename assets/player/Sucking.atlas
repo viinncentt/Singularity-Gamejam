@@ -1,0 +1,10 @@
+Sucking.png
+size: 132, 66
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+JOHNNYSUCK1
+  bounds: 1, 1, 64, 64
+JOHNNYSUCK2
+  bounds: 67, 1, 64, 64
