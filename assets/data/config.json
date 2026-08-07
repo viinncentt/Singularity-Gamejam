@@ -13,6 +13,9 @@
   "MaxJumpForce": "7",
   "MaxJumpTime": "0.1",
 
+  "CoyoteTime": "0.3",
+  "JumpBufferTime": "0.1",
+
   "LandMovementLock": "false",
   "LandDuration": "7"
 }

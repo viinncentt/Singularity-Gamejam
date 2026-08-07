@@ -40,6 +40,17 @@ public class PlayerInputSystem extends IteratingSystem {
     private float jumpHoldTime = 0f;
     private final float maxJumpTime;
 
+    // Stop player from holding jump
+    private boolean wasJumpPressed = false;
+
+    // Coyote time
+    private float coyoteTimer = 0f;
+    private final float coyoteTime;
+
+    // Jump buffering
+    private float jumpBufferTimer = 0f;
+    private final float jumpBufferTime;
+
     // Landing
     private boolean wasGrounded;
     private float landStateTime = 0f;
@@ -59,6 +70,10 @@ public class PlayerInputSystem extends IteratingSystem {
 
         landDuration = JsonHelper.getConfigValue().getFloat("LandDuration") / 100f;
         landMovementLock = JsonHelper.getConfigValue().getBoolean("LandMovementLock");
+
+        coyoteTime = JsonHelper.getConfigValue().getFloat("CoyoteTime");
+
+        jumpBufferTime = JsonHelper.getConfigValue().getFloat("JumpBufferTime");
     }
 
     @Override
@@ -111,31 +126,7 @@ public class PlayerInputSystem extends IteratingSystem {
         rb.movedX = moveX != 0f;
 
         // Jumping
-        if (Gdx.input.isKeyJustPressed(Input.Keys.W) && rb.grounded && !(landStateTime > 0f)) {
-            rb.velocity.y = baseJumpForce; // always applied, no matter what
-            rb.movedY = true;
-            isJumping = true;
-            jumpHoldTime = 0f;
-        }
-
-        if (isJumping) {
-            jumpHoldTime += world.getDelta();
-
-            boolean stillHolding = Gdx.input.isKeyPressed(Input.Keys.W);
-            boolean withinMaxHold = jumpHoldTime < maxJumpTime;
-
-            if (stillHolding && withinMaxHold && rb.velocity.y > 0f) {
-                // Ramp above the base the longer W is held, capped at maxJumpForce
-                float t = jumpHoldTime / maxJumpTime;
-                rb.velocity.y = baseJumpForce + (maxJumpForce - baseJumpForce) * t;
-            } else {
-                isJumping = false;
-                if (!stillHolding && rb.velocity.y > baseJumpForce) {
-                    // Only cut back down to the guaranteed floor — never below it
-                    rb.velocity.y = baseJumpForce;
-                }
-            }
-        }
+        jumpHandler();
 
 
         // Falling
@@ -176,6 +167,53 @@ public class PlayerInputSystem extends IteratingSystem {
             animator.currentState = State.WALKING;
         } else {
             animator.currentState = State.IDLE;
+        }
+    }
+
+    private void jumpHandler() {
+        if (rb.grounded) {
+            coyoteTimer = coyoteTime;
+        } else {
+            coyoteTimer -= world.getDelta();
+        }
+
+        boolean jumpPressed = Gdx.input.isKeyPressed(Input.Keys.W);
+
+        if (jumpPressed && !wasJumpPressed) {
+            jumpBufferTimer = jumpBufferTime;
+        } else if (jumpBufferTimer > 0f) {
+            jumpBufferTimer -= world.getDelta();
+        }
+
+        if (jumpBufferTimer > 0f && coyoteTimer > 0f) {
+            rb.velocity.y = baseJumpForce;
+            rb.movedY = true;
+            isJumping = true;
+            jumpHoldTime = 0f;
+
+            jumpBufferTimer = 0f;
+            coyoteTimer = 0f;
+        }
+
+        wasJumpPressed = jumpPressed;
+
+        if (isJumping) {
+            jumpHoldTime += world.getDelta();
+
+            boolean stillHolding = Gdx.input.isKeyPressed(Input.Keys.W);
+            boolean withinMaxHold = jumpHoldTime < maxJumpTime;
+
+            if (stillHolding && withinMaxHold && rb.velocity.y > 0f) {
+                float t = jumpHoldTime / maxJumpTime;
+                rb.velocity.y =
+                    baseJumpForce + (maxJumpForce - baseJumpForce) * t;
+            } else {
+                isJumping = false;
+
+                if (!stillHolding && rb.velocity.y > baseJumpForce) {
+                    rb.velocity.y = baseJumpForce;
+                }
+            }
         }
     }
 }
