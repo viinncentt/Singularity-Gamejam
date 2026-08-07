@@ -17,5 +17,15 @@
   "JumpBufferTime": "0.1",
 
   "LandMovementLock": "false",
-  "LandDuration": "7"
+  "LandDuration": "7",
+
+  "SuckingTime": "1",
+  "PlayerSuckingAnimationSpeed": "10",
+
+  "ShootingTime": "1",
+  "PlayerShootingAnimationSpeed": "5",
+
+  "UndefinedMassAnimationSpeed": "15",
+  "UndefinedMassSpeed": "3",
+  "UndefinedMassDetectionRadius": "5"
 }

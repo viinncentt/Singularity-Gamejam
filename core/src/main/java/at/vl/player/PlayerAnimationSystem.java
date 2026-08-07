@@ -16,6 +16,7 @@ import at.vl.ecs.components.Animator;
 
 import at.vl.ecs.components.Collider;
 import at.vl.ecs.components.Facing;
+import at.vl.ecs.components.Player;
 import at.vl.ecs.components.RigidBody;
 import at.vl.util.JsonHelper;
 
@@ -27,7 +28,6 @@ public class PlayerAnimationSystem extends IteratingSystem {
 
     private Collider collider;
     private RigidBody rb;
-    private Animator animator;
     private Facing facing;
 
     private final TextureRegion IDLE_ANIMATION;
@@ -35,9 +35,11 @@ public class PlayerAnimationSystem extends IteratingSystem {
     private final TextureRegion JUMP_ANIMATION;
     private final TextureRegion FALL_ANIMATION;
     private final TextureRegion LAND_ANIMATION;
+    private final Animation<TextureRegion> SUCKING_ANIMATION;
+    private final Animation<TextureRegion> SHOOTING_ANIMATION;
 
     public PlayerAnimationSystem() {
-        super(Aspect.all(Collider.class, RigidBody.class, Animator.class, Facing.class));
+        super(Aspect.all(Player.class, Collider.class, RigidBody.class, Animator.class, Facing.class));
 
         // Animations
         // Idle
@@ -60,6 +62,16 @@ public class PlayerAnimationSystem extends IteratingSystem {
         // Land
         temp = new Texture(Gdx.files.internal("player/PlayerLand.png"));
         LAND_ANIMATION = new TextureRegion(temp);
+
+        // Sucking
+        atlas = new TextureAtlas(Gdx.files.internal("player/Sucking.atlas"));
+        frames = atlas.getRegions();
+        SUCKING_ANIMATION = new Animation<>(1f / JsonHelper.getConfigValue().getFloat("PlayerSuckingAnimationSpeed") , frames, Animation.PlayMode.LOOP);
+
+        // Shooting
+        atlas = new TextureAtlas(Gdx.files.internal("player/Shooting.atlas"));
+        frames = atlas.getRegions();
+        SHOOTING_ANIMATION = new Animation<>(1f / JsonHelper.getConfigValue().getFloat("PlayerShootingAnimationSpeed") , frames, Animation.PlayMode.LOOP);
     }
 
     @Override
@@ -67,7 +79,7 @@ public class PlayerAnimationSystem extends IteratingSystem {
         collider = colliderMapper.get(entityId);
         rb = rigidBodyMapper.get(entityId);
         facing = facingMapper.get(entityId);
-        animator = animatorMapper.get(entityId);
+        Animator animator = animatorMapper.get(entityId);
 
         animator.stateTime += world.getDelta();
 
@@ -92,6 +104,14 @@ public class PlayerAnimationSystem extends IteratingSystem {
                 animator.currentFrame = LAND_ANIMATION;
                 break;
 
+            case SUCKING:
+                animator.currentFrame = SUCKING_ANIMATION.getKeyFrame(animator.stateTime, true);
+                break;
+
+            case SHOOTING:
+                animator.currentFrame = SHOOTING_ANIMATION.getKeyFrame(animator.stateTime, true);
+                break;
+
             default:
                 break;
         }
@@ -104,9 +124,5 @@ public class PlayerAnimationSystem extends IteratingSystem {
         if (frame.isFlipX() != shouldBeFlipped) {
             frame.flip(true, false);
         }
-    }
-
-    public void render(SpriteBatch batch) {
-        batch.draw(animator.currentFrame, collider.rect.x - 0.15f, collider.rect.y, 1f, 1f);
     }
 }

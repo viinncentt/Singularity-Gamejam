@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import at.vl.ecs.components.Animator;
 import at.vl.ecs.components.Collider;
+import at.vl.ecs.components.Player;
 import at.vl.ecs.components.RigidBody;
 
 
@@ -41,7 +42,7 @@ public class DebugOverlay extends IteratingSystem {
     private Label playerState;
 
     public DebugOverlay() {
-        super(Aspect.all(RigidBody.class, Collider.class, Animator.class));
+        super(Aspect.all(Player.class, RigidBody.class, Collider.class, Animator.class));
 
         screenViewport = new ScreenViewport();
         screenViewport.setUnitsPerPixel(1f);

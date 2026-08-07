@@ -6,6 +6,7 @@ import com.artemis.systems.IteratingSystem;
 
 import at.vl.ecs.components.Animator;
 import at.vl.ecs.components.Collider;
+import at.vl.ecs.components.Player;
 import at.vl.ecs.components.RigidBody;
 
 public class PlayerMovementSystem extends IteratingSystem {
@@ -13,10 +14,11 @@ public class PlayerMovementSystem extends IteratingSystem {
     private ComponentMapper<Collider> colliderMapper;
 
     public PlayerMovementSystem() {
-        super(Aspect.all(RigidBody.class, Collider.class));
+        super(Aspect.all(Player.class, RigidBody.class, Collider.class));
     }
     @Override
     protected void process(int entityId) {
+
         // Get rigid body and collider
         RigidBody rb = rigidBodyMapper.get(entityId);
         Collider collider = colliderMapper.get(entityId);

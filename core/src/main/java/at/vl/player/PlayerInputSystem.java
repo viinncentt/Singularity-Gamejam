@@ -10,7 +10,7 @@ import at.vl.ecs.State;
 import at.vl.ecs.components.Animator;
 import at.vl.ecs.components.Collider;
 import at.vl.ecs.components.Facing;
-import at.vl.ecs.components.PlayerInput;
+import at.vl.ecs.components.Player;
 import at.vl.ecs.components.RigidBody;
 import at.vl.util.JsonHelper;
 
@@ -57,8 +57,16 @@ public class PlayerInputSystem extends IteratingSystem {
     private final float landDuration;
     private final boolean landMovementLock;
 
+    // Abilities
+    private boolean filled = false;
+    private float suckingTimer;
+    private final float suckingTime;
+
+    private float shootingTimer;
+    private final float shootingTime;
+
     public PlayerInputSystem() {
-        super(Aspect.all(PlayerInput.class, RigidBody.class, Collider.class, Animator.class));
+        super(Aspect.all(Player.class, Player.class, RigidBody.class, Collider.class, Animator.class));
 
         speed = JsonHelper.getConfigValue().getFloat("PlayerSpeed");
         startSpeed = JsonHelper.getConfigValue().getFloat("StartSpeed");
@@ -74,6 +82,10 @@ public class PlayerInputSystem extends IteratingSystem {
         coyoteTime = JsonHelper.getConfigValue().getFloat("CoyoteTime");
 
         jumpBufferTime = JsonHelper.getConfigValue().getFloat("JumpBufferTime");
+
+        // Abilities
+        suckingTime = JsonHelper.getConfigValue().getFloat("SuckingTime");
+        shootingTime = JsonHelper.getConfigValue().getFloat("ShootingTime");
     }
 
     @Override
@@ -150,10 +162,11 @@ public class PlayerInputSystem extends IteratingSystem {
         // Save grounded state for next frame
         wasGrounded = rb.grounded;
 
-        // Abilities
-
         // State Handler
         stateHandler();
+
+        // Abilities
+        abilityHandler();
     }
 
     private void stateHandler() {
@@ -213,6 +226,43 @@ public class PlayerInputSystem extends IteratingSystem {
                 if (!stillHolding && rb.velocity.y > baseJumpForce) {
                     rb.velocity.y = baseJumpForce;
                 }
+            }
+        }
+    }
+
+
+    private void abilityHandler() {
+        if (filled) {
+            // Shooting
+            if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+                animator.currentState = State.SHOOTING;
+                shootingTimer += world.getDelta();
+
+                if (shootingTimer >= shootingTime) {
+                    // Shooting completed
+                    filled = false;
+                    // Reset timer
+                    shootingTimer = 0f;
+                }
+            } else {
+                // Reset time if not holding space
+                shootingTimer = 0f;
+            }
+        } else {
+            // Sucking
+            if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+                animator.currentState = State.SUCKING;
+                suckingTimer += world.getDelta();
+
+                if (suckingTimer >= suckingTime) {
+                    // Suck completed
+                    filled = true;
+                    // Reset timer
+                    suckingTimer = 0f;
+                }
+            } else {
+                // Reset time if not holding space
+                suckingTimer = 0f;
             }
         }
     }

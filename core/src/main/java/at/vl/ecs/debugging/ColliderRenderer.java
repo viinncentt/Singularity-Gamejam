@@ -11,27 +11,28 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import at.vl.ecs.components.Collider;
+import at.vl.ecs.components.Enemy;
 
-public class ColliderRenderer extends BaseSystem {
+public class ColliderRenderer {
     private ShapeRenderer shapeRenderer;
     private OrthographicCamera camera;
 
     private ComponentMapper<Collider> colliderMapper;
     private EntitySubscription subscription;
 
-    public ColliderRenderer(OrthographicCamera camera, ShapeRenderer shapeRenderer) {
-        this.shapeRenderer = shapeRenderer;
-        this.camera = camera;
-    }
+    private World world;
 
-    @Override
-    protected void initialize() {
+    public ColliderRenderer(World world, OrthographicCamera camera, ShapeRenderer shapeRenderer) {
+        this.world = world;
+        this.camera = camera;
+        this.shapeRenderer = shapeRenderer;
+
+        colliderMapper = world.getMapper(Collider.class);
         subscription = world.getAspectSubscriptionManager()
             .get(Aspect.all(Collider.class));
     }
 
-    @Override
-    protected void processSystem() {
+    public void render() {
         shapeRenderer.setProjectionMatrix(camera.combined);
 
         IntBag entityIds = subscription.getEntities();
@@ -41,9 +42,12 @@ public class ColliderRenderer extends BaseSystem {
 
         for (int i = 0; i < entityIds.size(); i++) {
             Collider collider = colliderMapper.get(entityIds.get(i));
+
             shapeRenderer.rect(
-                collider.rect.x, collider.rect.y,
-                collider.rect.width, collider.rect.height
+                collider.rect.x,
+                collider.rect.y,
+                collider.rect.width,
+                collider.rect.height
             );
         }
 

@@ -3,8 +3,6 @@ package at.vl.levels;
 import com.artemis.World;
 import com.artemis.WorldConfiguration;
 import com.artemis.WorldConfigurationBuilder;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -12,7 +10,11 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import at.vl.Main;
 import at.vl.collisionsystem.CollisionSystem;
 import at.vl.collisionsystem.GravitySystem;
-import at.vl.ecs.SpawningSystem;
+import at.vl.player.PlayerRenderSystem;
+import at.vl.systems.EnemyAISystem;
+import at.vl.systems.EnemyAnimationSystem;
+import at.vl.systems.EnemyRenderSystem;
+import at.vl.systems.SpawningSystem;
 import at.vl.ecs.debugging.ColliderRenderer;
 import at.vl.ecs.debugging.DebugOverlay;
 import at.vl.systems.MovementSystem;
@@ -30,22 +32,27 @@ public class TestScreen extends GameScreen {
     // Debugging
     private ShapeRenderer shapeRenderer;
 
-    private PlayerAnimationSystem playerAnimationSystem;
+    private ColliderRenderer colliderRenderer;
 
     public TestScreen(Main main) {
         super(main);
-        shapeRenderer = new ShapeRenderer();
 
-        playerAnimationSystem = new PlayerAnimationSystem();
-        config = new WorldConfigurationBuilder().with(new PlayerInputSystem(), new MovementSystem(), new SpawningSystem(),
-            new CollisionSystem(), new GravitySystem(), playerAnimationSystem, new DebugOverlay(),
-            new ColliderRenderer(camera, shapeRenderer)).build();
+        config = new WorldConfigurationBuilder().with(
+            new PlayerInputSystem(), new PlayerAnimationSystem(), new PlayerRenderSystem(batch),
+            new EnemyAISystem(), new EnemyAnimationSystem(), new EnemyRenderSystem(batch),
+            new MovementSystem(), new SpawningSystem(),
+            new CollisionSystem(), new GravitySystem(),  new DebugOverlay()
+        ).build();
 
         world = new World(config);
 
         spawner = world.getSystem(SpawningSystem.class);
         spawner.spawnGround(0f, 0f, 15f, 1f);
         spawner.spawnPlayer(1f, 10f);
+        spawner.spawnUndefinedMass(3f, 10f);
+
+        shapeRenderer = new ShapeRenderer();
+        colliderRenderer = new ColliderRenderer(world, camera, shapeRenderer);
     }
 
     @Override
@@ -62,13 +69,14 @@ public class TestScreen extends GameScreen {
 
         // Artemis ODB
         world.setDelta(delta);
-        world.process();
 
         // Draw
         batch.begin();
-        playerAnimationSystem.render(batch);
+
+        world.process();
         batch.end();
 
+        colliderRenderer.render();
     }
 
 
