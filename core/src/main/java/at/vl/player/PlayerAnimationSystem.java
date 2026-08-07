@@ -107,6 +107,6 @@ public class PlayerAnimationSystem extends IteratingSystem {
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(animator.currentFrame, collider.rect.x, collider.rect.y, 1f, 1f);
+        batch.draw(animator.currentFrame, collider.rect.x - 0.15f, collider.rect.y, 1f, 1f);
     }
 }

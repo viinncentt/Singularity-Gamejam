@@ -20,7 +20,7 @@ public class SpawningSystem extends BaseSystem {
         EntityEdit edit = entity.edit();
 
         Collider collider = colliderMapper.create(entity);
-        collider.rect.set(x, y, 1f, 1f);
+        collider.rect.set(x, y, 0.65f, 0.9f);
 
         edit.create(RigidBody.class);
 

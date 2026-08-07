@@ -108,10 +108,10 @@ public class CollisionSystem extends IteratingSystem {
 
         // Ground check using a 1-pixel feet sensor
         Rectangle feet = new Rectangle(
-            bodyCollider.rect.x + 1,
-            bodyCollider.rect.y - 0.001f,
-            bodyCollider.rect.width - 2,
-            0.001f
+            bodyCollider.rect.x + 0.0001f,
+            bodyCollider.rect.y - 0.05f,
+            bodyCollider.rect.width - 0.2f,
+            0.1f
         );
 
         // Assume player isn't grounded
