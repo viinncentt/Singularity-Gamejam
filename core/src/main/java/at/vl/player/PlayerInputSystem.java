@@ -446,19 +446,21 @@ public class PlayerInputSystem extends IteratingSystem {
             case DOWN:
                 break;
             case RIGHT:
+                requireARelease = true;
                 requireDRelease = true;
                 sidewayDashTimer = sidewayDashDuration;
                 sidewayDashVelocityX = -sidewayDashStrength;
-                moveX = sidewayDashStrength;
+                moveX = -sidewayDashStrength;
                 filled = false;
                 shootingTimer = 0f;
                 requireSpaceRelease = true;
                 break;
             case LEFT:
                 requireARelease = true;
+                requireDRelease = true;
                 sidewayDashTimer = sidewayDashDuration;
                 sidewayDashVelocityX = sidewayDashStrength;
-                moveX = -sidewayDashStrength;
+                moveX = sidewayDashStrength;
                 filled = false;
                 shootingTimer = 0f;
                 requireSpaceRelease = true;

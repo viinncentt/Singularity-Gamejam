@@ -5,6 +5,13 @@ import com.artemis.WorldConfiguration;
 import com.artemis.WorldConfigurationBuilder;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import at.vl.Main;
@@ -32,8 +39,12 @@ public class TestScreen extends GameScreen {
 
     // Debugging
     private ShapeRenderer shapeRenderer;
-
     private ColliderRenderer colliderRenderer;
+
+    // Tiled Map
+    private TiledMap map;
+    private OrthogonalTiledMapRenderer renderer;
+    private float tileSize;
 
     public TestScreen(Main main) {
         super(main);
@@ -48,9 +59,24 @@ public class TestScreen extends GameScreen {
         world = new World(config);
 
         spawner = world.getSystem(SpawningSystem.class);
-        spawner.spawnGround(0f, 0f, 15f, 1f);
+        // Tiled Map
+        tileSize = main.getTileSize();
+        map = new TmxMapLoader().load("rooms/ROOM1.tmx");
+        renderer = new OrthogonalTiledMapRenderer(map, 1f / tileSize);
+
+        // Hitboxes
+        MapLayer hitboxLayer = map.getLayers().get("hitbox");
+
+        for (MapObject object : hitboxLayer.getObjects()) {
+            RectangleMapObject rmp = (RectangleMapObject) object;
+            Rectangle rectangle = rmp.getRectangle();
+            spawner.spawnGround(rectangle.x / tileSize, rectangle.y / tileSize,
+                rectangle.width / tileSize, rectangle.height / tileSize);
+        }
+
+      //  spawner.spawnGround(0f, 0f, 15f, 1f);
         spawner.spawnPlayer(1f, 10f);
-        spawner.spawnUndefinedMass(9f, 10f);
+       // spawner.spawnUndefinedMass(9f, 10f);
         //spawner.spawnUndefinedMass(8f, 10f);
 
         shapeRenderer = new ShapeRenderer();
@@ -71,6 +97,10 @@ public class TestScreen extends GameScreen {
 
         // Artemis ODB
         world.setDelta(delta);
+
+        // Render tiled map
+        renderer.setView(camera);
+        renderer.render();
 
         // Draw
         batch.begin();

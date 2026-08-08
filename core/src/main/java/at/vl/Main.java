@@ -58,4 +58,8 @@ public class Main extends Game {
     public JsonReader getReader() {
         return reader;
     }
+
+    public float getTileSize() {
+        return tileSize;
+    }
 }
