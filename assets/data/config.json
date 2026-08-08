@@ -28,7 +28,10 @@
   "PlayerShootingAnimationSpeed": "5",
   "ShootingSlowdown": "0.1",
 
-  "DashStrength": "10",
+  "UpwardDashStrength": "10",
+
+  "SidewayDashDuration": "0.25",
+  "SidewayDashStrength": "10",
 
   "UndefinedMassAnimationSpeed": "15",
   "UndefinedMassSpeed": "3",

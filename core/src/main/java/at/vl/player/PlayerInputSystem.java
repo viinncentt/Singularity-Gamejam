@@ -77,7 +77,15 @@ public class PlayerInputSystem extends IteratingSystem {
     private ShootingState currentShootingState = ShootingState.NONE;
 
     // Shooting abilities
-    private final float dashStrength;
+    private final float upwardDashStrength;
+
+    private float sidewayDashVelocityX = 0f;
+    private float sidewayDashTimer = 0f;
+    private final float sidewayDashDuration;
+    private final float sidewayDashStrength;
+
+    private boolean requireDRelease = false;
+    private boolean requireARelease = false;
 
     public PlayerInputSystem() {
         super(Aspect.all(Player.class, RigidBody.class, Collider.class, Animator.class));
@@ -104,7 +112,10 @@ public class PlayerInputSystem extends IteratingSystem {
         shootingTime = JsonHelper.getConfigValue().getFloat("ShootingTime");
         shootingSlowdown = JsonHelper.getConfigValue().getFloat("ShootingSlowdown");
 
-        dashStrength = JsonHelper.getConfigValue().getFloat("DashStrength");
+        upwardDashStrength = JsonHelper.getConfigValue().getFloat("UpwardDashStrength");
+
+        sidewayDashDuration = JsonHelper.getConfigValue().getFloat("SidewayDashDuration");
+        sidewayDashStrength = JsonHelper.getConfigValue().getFloat("SidewayDashStrength");
     }
 
     @Override
@@ -128,7 +139,16 @@ public class PlayerInputSystem extends IteratingSystem {
         }
 
         // Walking
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        boolean dHeld = Gdx.input.isKeyPressed(Input.Keys.D);
+        if (requireDRelease) {
+            if (!dHeld) {
+                requireDRelease = false;
+            } else {
+                dHeld = false;
+            }
+        }
+
+        if (dHeld) {
             if (!(moveX >= speed)) {
                 moveX += currentSpeed / startSpeed;
             } else {
@@ -137,7 +157,16 @@ public class PlayerInputSystem extends IteratingSystem {
             facing.lookingRight = true;
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+        boolean aHeld = Gdx.input.isKeyPressed(Input.Keys.A);
+        if (requireARelease) {
+            if (!aHeld) {
+                requireARelease = false;
+            } else {
+                aHeld = false;
+            }
+        }
+
+        if (aHeld) {
             if (!(moveX <= -speed)) {
                 moveX -= currentSpeed / startSpeed;
             } else {
@@ -159,7 +188,11 @@ public class PlayerInputSystem extends IteratingSystem {
 
 
         // Knockback overrides normal movement input while active
-        if (rb.knockedBack) {
+        if (sidewayDashTimer > 0f) {
+            sidewayDashTimer -= world.getDelta();
+            rb.velocity.x = sidewayDashVelocityX;
+            rb.movedX = true;
+        } else if (rb.knockedBack) {
             rb.knockbackTimer -= world.getDelta();
             rb.velocity.x *= 0.9f;
             if (rb.knockbackTimer <= 0f) {
@@ -169,7 +202,6 @@ public class PlayerInputSystem extends IteratingSystem {
             rb.velocity.x = moveX;
             rb.movedX = moveX != 0f;
         }
-
         // Jumping
         jumpHandler();
 
@@ -405,7 +437,7 @@ public class PlayerInputSystem extends IteratingSystem {
 
         switch (currentShootingState) {
             case UP:
-                rb.velocity.y = -dashStrength;
+                rb.velocity.y = -upwardDashStrength;
                 filled = false;
                 wasJumpPressed = true;
                 shootingTimer = 0f;
@@ -414,8 +446,22 @@ public class PlayerInputSystem extends IteratingSystem {
             case DOWN:
                 break;
             case RIGHT:
+                requireDRelease = true;
+                sidewayDashTimer = sidewayDashDuration;
+                sidewayDashVelocityX = -sidewayDashStrength;
+                moveX = sidewayDashStrength;
+                filled = false;
+                shootingTimer = 0f;
+                requireSpaceRelease = true;
                 break;
             case LEFT:
+                requireARelease = true;
+                sidewayDashTimer = sidewayDashDuration;
+                sidewayDashVelocityX = sidewayDashStrength;
+                moveX = -sidewayDashStrength;
+                filled = false;
+                shootingTimer = 0f;
+                requireSpaceRelease = true;
                 break;
             default:
                 break;
