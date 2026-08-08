@@ -1,14 +1,18 @@
 package at.vl.player;
 
 import com.artemis.Aspect;
+import com.artemis.AspectSubscriptionManager;
 import com.artemis.ComponentMapper;
+import com.artemis.EntitySubscription;
 import com.artemis.systems.IteratingSystem;
+import com.artemis.utils.IntBag;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
 import at.vl.ecs.State;
 import at.vl.ecs.components.Animator;
 import at.vl.ecs.components.Collider;
+import at.vl.ecs.components.Enemy;
 import at.vl.ecs.components.Facing;
 import at.vl.ecs.components.Player;
 import at.vl.ecs.components.RigidBody;
@@ -19,6 +23,9 @@ public class PlayerInputSystem extends IteratingSystem {
     private ComponentMapper<Collider> colliderMapper;
     private ComponentMapper<Facing> facingMapper;
     private ComponentMapper<Animator> animatorMapper;
+
+    private AspectSubscriptionManager asm;
+    private EntitySubscription enemySubscription;
 
     private Collider collider;
     private RigidBody rb;
@@ -61,9 +68,16 @@ public class PlayerInputSystem extends IteratingSystem {
     private boolean filled = false;
     private float suckingTimer;
     private final float suckingTime;
+    private final float suckingRadius;
+    private int suckingTargetId = -1; // -1 means no current target
 
     private float shootingTimer;
     private final float shootingTime;
+    private final float shootingSlowdown;
+    private ShootingState currentShootingState = ShootingState.NONE;
+
+    // Shooting abilities
+    private final float dashStrength;
 
     public PlayerInputSystem() {
         super(Aspect.all(Player.class, Player.class, RigidBody.class, Collider.class, Animator.class));
@@ -85,7 +99,17 @@ public class PlayerInputSystem extends IteratingSystem {
 
         // Abilities
         suckingTime = JsonHelper.getConfigValue().getFloat("SuckingTime");
+        suckingRadius = JsonHelper.getConfigValue().getFloat("SuckingRadius");
+
         shootingTime = JsonHelper.getConfigValue().getFloat("ShootingTime");
+        shootingSlowdown = JsonHelper.getConfigValue().getFloat("ShootingSlowdown");
+
+        dashStrength = JsonHelper.getConfigValue().getFloat("DashStrength");
+    }
+
+    @Override
+    protected void initialize() {
+        enemySubscription = asm.get(Aspect.all(Enemy.class, Collider.class));
     }
 
     @Override
@@ -230,40 +254,154 @@ public class PlayerInputSystem extends IteratingSystem {
         }
     }
 
+    private boolean requireSpaceRelease = false;
 
     private void abilityHandler() {
+        boolean spaceHeld = Gdx.input.isKeyPressed(Input.Keys.SPACE);
+
+        if (requireSpaceRelease) {
+            if (!spaceHeld) {
+                requireSpaceRelease = false;
+            } else {
+                spaceHeld = false;
+            }
+        }
+
         if (filled) {
             // Shooting
-            if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            if (spaceHeld) {
                 animator.currentState = State.SHOOTING;
                 shootingTimer += world.getDelta();
+
+                shooting();
+                // To stop player from looking like flying up
+                if(rb.velocity.y > 0f) {
+                    rb.velocity.y = 0f;
+                }
 
                 if (shootingTimer >= shootingTime) {
                     // Shooting completed
                     filled = false;
                     // Reset timer
                     shootingTimer = 0f;
+                    requireSpaceRelease = true;
                 }
             } else {
                 // Reset time if not holding space
                 shootingTimer = 0f;
+                rb.slowerGravity = false;
             }
         } else {
+            rb.slowerGravity = false;
             // Sucking
-            if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            if (spaceHeld) {
                 animator.currentState = State.SUCKING;
-                suckingTimer += world.getDelta();
+                if (isEnemyInSuckingRadius()) {
+                    // Sucking enemy in
+                    suckingTimer += world.getDelta();
 
-                if (suckingTimer >= suckingTime) {
-                    // Suck completed
-                    filled = true;
-                    // Reset timer
+                    if (suckingTimer >= suckingTime) {
+                        world.delete(suckingTargetId);
+                        // Reset target
+                        suckingTargetId = -1;
+                        // Suck completed
+                        filled = true;
+                        // Reset timer
+                        suckingTimer = 0f;
+                        requireSpaceRelease = true;
+                    }
+                } else {
+                    // Reset enemy
+                    suckingTargetId = -1;
+                    // Reset time if enemy isn't in radius
                     suckingTimer = 0f;
                 }
             } else {
                 // Reset time if not holding space
                 suckingTimer = 0f;
             }
+        }
+
+    }
+
+    private boolean isEnemyInSuckingRadius() {
+        float px = collider.rect.x;
+        float py = collider.rect.y;
+        float radiusSq = suckingRadius * suckingRadius;
+
+        // Already have a target locked in from a previous frame — keep checking it specifically
+        if (suckingTargetId != -1) {
+            Collider targetCollider = colliderMapper.get(suckingTargetId);
+            float dx = targetCollider.rect.x - px;
+            float dy = targetCollider.rect.y - py;
+            if (dx * dx + dy * dy <= radiusSq) {
+                return true;
+            }
+            suckingTargetId = -1; // target moved out of range or is gone
+        }
+
+        // No locked target — scan for a new one
+        IntBag entities = enemySubscription.getEntities();
+        int[] ids = entities.getData();
+        for (int i = 0, s = entities.size(); i < s; i++) {
+            int enemyId = ids[i];
+            Collider enemyCollider = colliderMapper.get(enemyId);
+            float dx = enemyCollider.rect.x - px;
+            float dy = enemyCollider.rect.y - py;
+            if (dx * dx + dy * dy <= radiusSq) {
+                suckingTargetId = enemyId;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void shooting() {
+        world.setDelta(Gdx.graphics.getDeltaTime() * shootingSlowdown);
+        rb.slowerGravity = true;
+        rb.fasterGravity = false;
+
+        rb.velocity.x = 0f;
+
+        // None by default
+        currentShootingState = ShootingState.NONE;
+
+        // Up
+        if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+            currentShootingState = ShootingState.UP;
+        }
+
+        // Down
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            currentShootingState = ShootingState.DOWN;
+        }
+
+        // Right
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            currentShootingState = ShootingState.RIGHT;
+        }
+
+        // Left
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            currentShootingState = ShootingState.LEFT;
+        }
+
+        switch (currentShootingState) {
+            case UP:
+                rb.velocity.y = -dashStrength;
+                filled = false;
+                wasJumpPressed = true;
+                shootingTimer = 0f;
+                requireSpaceRelease = true;
+                break;
+            case DOWN:
+                break;
+            case RIGHT:
+                break;
+            case LEFT:
+                break;
+            default:
+                break;
         }
     }
 }

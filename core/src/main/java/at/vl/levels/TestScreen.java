@@ -50,6 +50,7 @@ public class TestScreen extends GameScreen {
         spawner.spawnGround(0f, 0f, 15f, 1f);
         spawner.spawnPlayer(1f, 10f);
         spawner.spawnUndefinedMass(3f, 10f);
+        spawner.spawnUndefinedMass(3f, 10f);
 
         shapeRenderer = new ShapeRenderer();
         colliderRenderer = new ColliderRenderer(world, camera, shapeRenderer);

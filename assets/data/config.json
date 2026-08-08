@@ -21,9 +21,13 @@
 
   "SuckingTime": "1",
   "PlayerSuckingAnimationSpeed": "10",
+  "SuckingRadius": "1",
 
-  "ShootingTime": "1",
+  "ShootingTime": "5",
   "PlayerShootingAnimationSpeed": "5",
+  "ShootingSlowdown": "0.1",
+
+  "DashStrength": "10",
 
   "UndefinedMassAnimationSpeed": "15",
   "UndefinedMassSpeed": "3",

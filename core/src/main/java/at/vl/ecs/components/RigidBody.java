@@ -9,4 +9,5 @@ public class RigidBody extends Component {
     public boolean movedY;
     public boolean grounded;
     public boolean fasterGravity;
+    public boolean slowerGravity;
 }
