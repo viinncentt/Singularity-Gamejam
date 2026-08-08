@@ -10,4 +10,10 @@ public class RigidBody extends Component {
     public boolean grounded;
     public boolean fasterGravity;
     public boolean slowerGravity;
+
+    public boolean knockedBack = false;
+    public float knockbackTimer = 0f;
+    public float knockbackDuration;
+
+    public boolean isBeingSucked = false;
 }

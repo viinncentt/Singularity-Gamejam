@@ -31,7 +31,8 @@ public class SpawningSystem extends BaseSystem {
         Collider collider = edit.create(Collider.class);
         collider.rect.set(x, y, 0.65f, 0.9f);
 
-        edit.create(RigidBody.class);
+        RigidBody rigidBody = edit.create(RigidBody.class);
+        rigidBody.knockbackDuration = JsonHelper.getConfigValue().getFloat("PlayerKnockbackDuration");
 
         // Player
         Player player = edit.create(Player.class);
@@ -81,6 +82,7 @@ public class SpawningSystem extends BaseSystem {
 
         RigidBody rigidbody = edit.create(RigidBody.class);
         rigidbody.velocity.set(0f, 0f);
+        rigidbody.knockbackDuration = 0.25f;
 
         // Animator
         Animator animator = edit.create(Animator.class);
@@ -99,7 +101,6 @@ public class SpawningSystem extends BaseSystem {
         enemy.detectionRadius = JsonHelper.getConfigValue().getFloat("UndefinedMassDetectionRadius");
         enemy.attackRange = 1f;
 
-        enemy.knockbackDuration = JsonHelper.getConfigValue().getFloat("UndefinedMassKnockbackDuration");
         enemy.knockbackStrength = JsonHelper.getConfigValue().getFloat("UndefinedMassKnockbackStrength");
 
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("enemies/enemy1/Walking.atlas"));

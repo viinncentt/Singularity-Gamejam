@@ -129,7 +129,7 @@ public class PlayerInputSystem extends IteratingSystem {
 
         // Walking
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            if (!(moveX >= speed))  {
+            if (!(moveX >= speed)) {
                 moveX += currentSpeed / startSpeed;
             } else {
                 moveX = speed;
@@ -158,8 +158,17 @@ public class PlayerInputSystem extends IteratingSystem {
         }
 
 
-        rb.velocity.x = moveX;
-        rb.movedX = moveX != 0f;
+        // Knockback overrides normal movement input while active
+        if (rb.knockedBack) {
+            rb.knockbackTimer -= world.getDelta();
+            rb.velocity.x *= 0.9f;
+            if (rb.knockbackTimer <= 0f) {
+                rb.knockedBack = false;
+            }
+        } else {
+            rb.velocity.x = moveX;
+            rb.movedX = moveX != 0f;
+        }
 
         // Jumping
         jumpHandler();
@@ -275,7 +284,7 @@ public class PlayerInputSystem extends IteratingSystem {
 
                 shooting();
                 // To stop player from looking like flying up
-                if(rb.velocity.y > 0f) {
+                if (rb.velocity.y > 0f) {
                     rb.velocity.y = 0f;
                 }
 
@@ -311,14 +320,15 @@ public class PlayerInputSystem extends IteratingSystem {
                         requireSpaceRelease = true;
                     }
                 } else {
-                    // Reset enemy
-                    suckingTargetId = -1;
                     // Reset time if enemy isn't in radius
                     suckingTimer = 0f;
                 }
             } else {
-                // Reset time if not holding space
                 suckingTimer = 0f;
+                if (suckingTargetId != -1) {
+                    rigidBodyMapper.get(suckingTargetId).isBeingSucked = false;
+                    suckingTargetId = -1;
+                }
             }
         }
 
@@ -329,18 +339,20 @@ public class PlayerInputSystem extends IteratingSystem {
         float py = collider.rect.y;
         float radiusSq = suckingRadius * suckingRadius;
 
-        // Already have a target locked in from a previous frame — keep checking it specifically
         if (suckingTargetId != -1) {
             Collider targetCollider = colliderMapper.get(suckingTargetId);
             float dx = targetCollider.rect.x - px;
             float dy = targetCollider.rect.y - py;
             if (dx * dx + dy * dy <= radiusSq) {
+                RigidBody targetRb = rigidBodyMapper.get(suckingTargetId);
+                targetRb.velocity.x = 0f;
+                targetRb.velocity.y = 0f;
                 return true;
             }
-            suckingTargetId = -1; // target moved out of range or is gone
+            rigidBodyMapper.get(suckingTargetId).isBeingSucked = false;
+            suckingTargetId = -1;
         }
 
-        // No locked target — scan for a new one
         IntBag entities = enemySubscription.getEntities();
         int[] ids = entities.getData();
         for (int i = 0, s = entities.size(); i < s; i++) {
@@ -349,12 +361,17 @@ public class PlayerInputSystem extends IteratingSystem {
             float dx = enemyCollider.rect.x - px;
             float dy = enemyCollider.rect.y - py;
             if (dx * dx + dy * dy <= radiusSq) {
-                suckingTargetId = enemyId;
+                suckingTargetId = enemyId; // was missing
+                RigidBody targetRb = rigidBodyMapper.get(enemyId);
+                targetRb.velocity.x = 0f;
+                targetRb.velocity.y = 0f;
+                targetRb.isBeingSucked = true;
                 return true;
             }
         }
         return false;
     }
+
 
     private void shooting() {
         world.setDelta(Gdx.graphics.getDeltaTime() * shootingSlowdown);

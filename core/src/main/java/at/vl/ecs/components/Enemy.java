@@ -23,7 +23,7 @@ public class Enemy extends Component {
     public float attackRange;
 
     public boolean hasDealtDamage = false;
-    public float knockbackTimer = 0f;
-    public float knockbackDuration;
     public float knockbackStrength;
+
+    public float lastDirection = 1f;
 }

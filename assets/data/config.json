@@ -8,6 +8,7 @@
   "StartSpeed": "5",
   "StopSpeed": "2",
   "PlayerWalkingAnimationSpeed": "10",
+  "PlayerKnockbackDuration": "0.5",
 
   "BaseJumpForce": "3",
   "MaxJumpForce": "7",
@@ -21,7 +22,7 @@
 
   "SuckingTime": "1",
   "PlayerSuckingAnimationSpeed": "10",
-  "SuckingRadius": "1",
+  "SuckingRadius": "2",
 
   "ShootingTime": "5",
   "PlayerShootingAnimationSpeed": "5",
@@ -32,6 +33,5 @@
   "UndefinedMassAnimationSpeed": "15",
   "UndefinedMassSpeed": "3",
   "UndefinedMassDetectionRadius": "5",
-  "UndefinedMassKnockbackDuration": "0.6",
-  "UndefinedMassKnockbackStrength": "20"
+  "UndefinedMassKnockbackStrength": "30"
 }
