@@ -80,7 +80,7 @@ public class PlayerInputSystem extends IteratingSystem {
     private final float dashStrength;
 
     public PlayerInputSystem() {
-        super(Aspect.all(Player.class, Player.class, RigidBody.class, Collider.class, Animator.class));
+        super(Aspect.all(Player.class, RigidBody.class, Collider.class, Animator.class));
 
         speed = JsonHelper.getConfigValue().getFloat("PlayerSpeed");
         startSpeed = JsonHelper.getConfigValue().getFloat("StartSpeed");

@@ -31,5 +31,7 @@
 
   "UndefinedMassAnimationSpeed": "15",
   "UndefinedMassSpeed": "3",
-  "UndefinedMassDetectionRadius": "5"
+  "UndefinedMassDetectionRadius": "5",
+  "UndefinedMassKnockbackDuration": "0.6",
+  "UndefinedMassKnockbackStrength": "20"
 }

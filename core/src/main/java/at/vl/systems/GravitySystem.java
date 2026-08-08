@@ -1,4 +1,4 @@
-package at.vl.collisionsystem;
+package at.vl.systems;
 
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;

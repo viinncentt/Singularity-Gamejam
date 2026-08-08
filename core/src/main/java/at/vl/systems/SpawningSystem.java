@@ -28,13 +28,15 @@ public class SpawningSystem extends BaseSystem {
         Entity entity = world.createEntity();
         EntityEdit edit = entity.edit();
 
-        Collider collider = colliderMapper.create(entity);
+        Collider collider = edit.create(Collider.class);
         collider.rect.set(x, y, 0.65f, 0.9f);
 
         edit.create(RigidBody.class);
 
         // Player
-        edit.create(Player.class);
+        Player player = edit.create(Player.class);
+        player.maxHealth = 2;
+        player.currentHealth = player.maxHealth;
 
         // Animator
         Animator animator = edit.create(Animator.class);
@@ -50,10 +52,10 @@ public class SpawningSystem extends BaseSystem {
         Entity entity = world.createEntity();
         EntityEdit edit = entity.edit();
 
-        Collider collider = colliderMapper.create(entity);
+        Collider collider = edit.create(Collider.class);
         collider.rect.set(x, y, width, height);
 
-        RigidBody rigidbody = rigidBodyMapper.create(entity);
+        RigidBody rigidbody = edit.create(RigidBody.class);
         rigidbody.velocity.set(0f, 0f);
 
         // Animator
@@ -74,10 +76,10 @@ public class SpawningSystem extends BaseSystem {
         Entity entity = world.createEntity();
         EntityEdit edit = entity.edit();
 
-        Collider collider = colliderMapper.create(entity);
+        Collider collider = edit.create(Collider.class);
         collider.rect.set(x, y, 1f, 1f);
 
-        RigidBody rigidbody = rigidBodyMapper.create(entity);
+        RigidBody rigidbody = edit.create(RigidBody.class);
         rigidbody.velocity.set(0f, 0f);
 
         // Animator
@@ -97,6 +99,9 @@ public class SpawningSystem extends BaseSystem {
         enemy.detectionRadius = JsonHelper.getConfigValue().getFloat("UndefinedMassDetectionRadius");
         enemy.attackRange = 1f;
 
+        enemy.knockbackDuration = JsonHelper.getConfigValue().getFloat("UndefinedMassKnockbackDuration");
+        enemy.knockbackStrength = JsonHelper.getConfigValue().getFloat("UndefinedMassKnockbackStrength");
+
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("enemies/enemy1/Walking.atlas"));
         Array<TextureAtlas.AtlasRegion> frames = atlas.getRegions();
         Animation WALKING_ANIMATION = new Animation<>(1f / JsonHelper.getConfigValue().getFloat("UndefinedMassAnimationSpeed") , frames, Animation.PlayMode.LOOP);
@@ -108,8 +113,9 @@ public class SpawningSystem extends BaseSystem {
 
     public void spawnGround(float x, float y, float width, float height) {
         Entity entity = world.createEntity();
+        EntityEdit edit = entity.edit();
 
-        Collider collider = colliderMapper.create(entity);
+        Collider collider = edit.create(Collider.class);
         collider.rect.set(x, y, width, height);
 
     }

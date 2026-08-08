@@ -21,4 +21,9 @@ public class Enemy extends Component {
 
     public float detectionRadius;
     public float attackRange;
+
+    public boolean hasDealtDamage = false;
+    public float knockbackTimer = 0f;
+    public float knockbackDuration;
+    public float knockbackStrength;
 }

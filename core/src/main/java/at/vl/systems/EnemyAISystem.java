@@ -21,6 +21,7 @@ public class EnemyAISystem extends IteratingSystem {
     private ComponentMapper<Collider> colliderMapper;
     private ComponentMapper<Animator> animatorMapper;
     private ComponentMapper<Facing> facingMapper;
+    private ComponentMapper<Player> playerMapper;
 
     private EntitySubscription playerSubscription;
 
@@ -46,8 +47,8 @@ public class EnemyAISystem extends IteratingSystem {
 
         int playerId = players.get(0);
 
+        Player player = playerMapper.get(playerId);
         Collider playerCollider = colliderMapper.get(playerId);
-
 
         float dx = playerCollider.rect.x - collider.rect.x;
         float dy = playerCollider.rect.y - collider.rect.y;
@@ -55,28 +56,35 @@ public class EnemyAISystem extends IteratingSystem {
         float distance = (float)Math.sqrt(dx * dx + dy * dy);
 
         if (distance <= enemy.detectionRadius) {
-
-            if (distance <= enemy.attackRange) {
-                rb.velocity.x = 0;
-                animator.currentState = State.ATTACKING;
-            } else {
-                animator.currentState = State.WALKING;
-
-                float direction = Math.signum(dx);
-
-                if (direction > 0) {
-                    facing.lookingRight = true;
-                } else if (direction < 0) {
-                    facing.lookingRight = false;
-                }
-
-                rb.velocity.x = direction * enemy.maxSpeed;
+            float direction = Math.signum(dx);
+            if (direction > 0) {
+                facing.lookingRight = true;
+            } else if (direction < 0) {
+                facing.lookingRight = false;
             }
 
+            if (enemy.knockbackTimer > 0f) {
+                enemy.knockbackTimer -= world.getDelta();
+                rb.velocity.x *= 0.9f;
+            } else if (distance <= enemy.attackRange) {
+                animator.currentState = State.ATTACKING;
+
+                if (!enemy.hasDealtDamage) {
+                    player.currentHealth -= 1;
+                    enemy.hasDealtDamage = true;
+
+                    rb.velocity.x = -direction * enemy.knockbackStrength;
+                    enemy.knockbackTimer = enemy.knockbackDuration;
+                }
+            } else {
+                animator.currentState = State.WALKING;
+                rb.velocity.x = direction * enemy.maxSpeed;
+                enemy.hasDealtDamage = false;
+            }
         } else {
             rb.velocity.x = 0;
             animator.currentState = State.IDLE;
+            enemy.hasDealtDamage = false;
         }
-
     }
 }

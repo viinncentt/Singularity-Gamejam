@@ -9,7 +9,8 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 import at.vl.Main;
 import at.vl.collisionsystem.CollisionSystem;
-import at.vl.collisionsystem.GravitySystem;
+import at.vl.systems.GravitySystem;
+import at.vl.player.PlayerHudSystem;
 import at.vl.player.PlayerRenderSystem;
 import at.vl.systems.EnemyAISystem;
 import at.vl.systems.EnemyAnimationSystem;
@@ -41,7 +42,7 @@ public class TestScreen extends GameScreen {
             new PlayerInputSystem(), new PlayerAnimationSystem(), new PlayerRenderSystem(batch),
             new EnemyAISystem(), new EnemyAnimationSystem(), new EnemyRenderSystem(batch),
             new MovementSystem(), new SpawningSystem(),
-            new CollisionSystem(), new GravitySystem(),  new DebugOverlay()
+            new CollisionSystem(), new GravitySystem(),  new DebugOverlay(), new PlayerHudSystem()
         ).build();
 
         world = new World(config);
@@ -49,8 +50,8 @@ public class TestScreen extends GameScreen {
         spawner = world.getSystem(SpawningSystem.class);
         spawner.spawnGround(0f, 0f, 15f, 1f);
         spawner.spawnPlayer(1f, 10f);
-        spawner.spawnUndefinedMass(3f, 10f);
-        spawner.spawnUndefinedMass(3f, 10f);
+        spawner.spawnUndefinedMass(9f, 10f);
+        //spawner.spawnUndefinedMass(8f, 10f);
 
         shapeRenderer = new ShapeRenderer();
         colliderRenderer = new ColliderRenderer(world, camera, shapeRenderer);
@@ -80,7 +81,12 @@ public class TestScreen extends GameScreen {
         colliderRenderer.render();
     }
 
+    @Override
+    public void resize(int width, int height) {
+        fitViewport.update(width, height, true);
 
+        world.getSystem(PlayerHudSystem.class).resize(width, height);
+    }
     @Override
     public void dispose() {
         super.dispose();
