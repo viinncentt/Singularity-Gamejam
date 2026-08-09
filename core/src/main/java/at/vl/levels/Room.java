@@ -1,8 +1,12 @@
 package at.vl.levels;
 
+import com.artemis.Aspect;
+import com.artemis.ComponentMapper;
+import com.artemis.EntitySubscription;
 import com.artemis.World;
 import com.artemis.WorldConfiguration;
 import com.artemis.WorldConfigurationBuilder;
+import com.artemis.utils.IntBag;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayer;
@@ -17,6 +21,8 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 import at.vl.Main;
 import at.vl.collisionsystem.CollisionSystem;
+import at.vl.ecs.components.Collider;
+import at.vl.ecs.components.Player;
 import at.vl.ecs.debugging.ColliderRenderer;
 import at.vl.ecs.debugging.DebugOverlay;
 import at.vl.player.PlayerAnimationSystem;
@@ -36,17 +42,21 @@ public class Room extends GameScreen implements Screen  {
     private World world;
     private WorldConfiguration config;
     private SpawningSystem spawner;
+    private EntitySubscription playerSubscription;
+    private ComponentMapper<Collider> colliderMapper;
 
     // Debugging
     private ShapeRenderer shapeRenderer;
     private ColliderRenderer colliderRenderer;
 
+    private JsonValue room;
     // Tiled Map
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
     private float tileSize;
 
-    public boolean nextRoom = false;
+    private boolean nextRoom;
+    private int roomNumber;
 
     public Room(Main main, int roomNumber) {
         super(main);
@@ -62,8 +72,10 @@ public class Room extends GameScreen implements Screen  {
 
         spawner = world.getSystem(SpawningSystem.class);
 
+        this.roomNumber = roomNumber;
+
         // Tiled Map
-        JsonValue room = JsonHelper.getRoomValue().get("Room" + roomNumber);
+        room = JsonHelper.getRoomValue().get("Room" + roomNumber);
         tileSize = main.getTileSize();
         map = new TmxMapLoader().load("rooms/" + room.getString("TiledMap"));
         renderer = new OrthogonalTiledMapRenderer(map, 1f / tileSize);
@@ -90,8 +102,15 @@ public class Room extends GameScreen implements Screen  {
                 }
             }
         }
+
+        playerSubscription = world.getAspectSubscriptionManager().get(Aspect.all(Player.class, Collider.class));
+        colliderMapper = world.getMapper(Collider.class);
+
+        // Debugging
         shapeRenderer = new ShapeRenderer();
         colliderRenderer = new ColliderRenderer(world, camera, shapeRenderer);
+
+        nextRoom = false;
     }
 
     @Override
@@ -120,7 +139,20 @@ public class Room extends GameScreen implements Screen  {
         batch.end();
 
         // If player activates next room condition
-        nextRoom = true;
+        IntBag players = playerSubscription.getEntities();
+        if (!players.isEmpty()) {
+            int playerId = players.get(0);
+            Collider playerCollider = colliderMapper.get(playerId);
+
+            if (playerCollider.rect.overlaps(
+                new Rectangle(room.getFloat("EndPointX"), room.getFloat("EndPointY"), 1f, 1f))) {
+                nextRoom = true;
+            }
+        }
+
+        if (nextRoom) {
+            main.setScreen(new Room(main, roomNumber + 1));
+        }
 
         colliderRenderer.render();
     }

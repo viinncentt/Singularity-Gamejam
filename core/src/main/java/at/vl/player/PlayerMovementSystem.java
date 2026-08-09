@@ -16,6 +16,7 @@ public class PlayerMovementSystem extends IteratingSystem {
     public PlayerMovementSystem() {
         super(Aspect.all(Player.class, RigidBody.class, Collider.class));
     }
+
     @Override
     protected void process(int entityId) {
 
