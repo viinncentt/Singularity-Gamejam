@@ -176,7 +176,7 @@ public class PlayerInputSystem extends IteratingSystem {
         }
 
         // If no movement key pressed reset movement
-        if (!Gdx.input.isKeyPressed(Input.Keys.A) && !Gdx.input.isKeyPressed(Input.Keys.D)) {
+        if (!aHeld && !dHeld) {
             if (moveX > 0) {
                 moveX -= currentSpeed / stopSpeed;
                 if (moveX < 0) moveX = 0;

@@ -37,6 +37,7 @@ import at.vl.systems.EnemyRenderSystem;
 import at.vl.systems.GravitySystem;
 import at.vl.systems.MovementSystem;
 import at.vl.systems.SpawningSystem;
+import at.vl.systems.UndefinedMassType;
 import at.vl.util.JsonHelper;
 
 public class Room extends GameScreen implements Screen  {
@@ -102,8 +103,9 @@ public class Room extends GameScreen implements Screen  {
         JsonValue enemies = room.get("Enemies");
         if (enemies != null) {
             for (JsonValue enemy = enemies.child; enemy != null; enemy = enemy.next) {
-                if (enemy.name.equals("UndefinedMass")) {
-                    spawner.spawnUndefinedMass(enemy.getFloat("X"), enemy.getFloat("Y"));
+                if (enemy.getString("EnemyType").equals("UndefinedMass")) {
+                    UndefinedMassType type = UndefinedMassType.valueOf(enemy.getString("Type"));
+                    spawner.spawnUndefinedMass(enemy.getFloat("X"), enemy.getFloat("Y"), type);
                 }
             }
         }

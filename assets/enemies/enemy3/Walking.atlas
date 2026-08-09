@@ -1,0 +1,14 @@
+Walking.png
+size: 256, 64
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+blueboyandprojectile1
+  bounds: 0, 0, 64, 64
+blueboyandprojectile2
+  bounds: 64, 0, 64, 64
+blueboyandprojectile3
+  bounds: 128, 0, 64, 64
+blueboyandprojectile4
+  bounds: 192, 0, 64, 64

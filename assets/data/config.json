@@ -37,6 +37,16 @@
 
   "UndefinedMassAnimationSpeed": "15",
   "UndefinedMassSpeed": "3",
-  "UndefinedMassDetectionRadius": "5",
-  "UndefinedMassKnockbackStrength": "10"
+  "UndefinedMassDetectionRadius": "10",
+  "UndefinedMassKnockbackStrength": "10",
+
+  "RedUndefinedMassAnimationSpeed": "15",
+  "RedUndefinedMassSpeed": "5",
+  "RedUndefinedMassDetectionRadius": "10",
+  "RedUndefinedMassKnockbackStrength": "10",
+
+  "BlueUndefinedMassAnimationSpeed": "15",
+  "BlueUndefinedMassSpeed": "2",
+  "BlueUndefinedMassDetectionRadius": "10",
+  "BlueUndefinedMassKnockbackStrength": "10"
 }

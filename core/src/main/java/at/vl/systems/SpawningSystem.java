@@ -74,7 +74,7 @@ public class SpawningSystem extends BaseSystem {
         enemy.currentHealth = enemy.maxHealth;
     }
 
-    public void spawnUndefinedMass(float x, float y) {
+    public void spawnUndefinedMass(float x, float y, UndefinedMassType type) {
         Entity entity = world.createEntity();
         EntityEdit edit = entity.edit();
 
@@ -94,26 +94,76 @@ public class SpawningSystem extends BaseSystem {
         facing.lookingRight = true;
 
         // Ignore Gravity
-        IgnoreGravity ignoreGravity = edit.create(IgnoreGravity.class);
+        switch (type) {
+            case NORMAL:
+                IgnoreGravity ignoreGravity = edit.create(IgnoreGravity.class);
 
-        // Enemy
-        Enemy enemy = edit.create(Enemy.class);
-        enemy.maxHealth = 3;
-        enemy.currentHealth = enemy.maxHealth;
-        enemy.maxSpeed = JsonHelper.getConfigValue().getFloat("UndefinedMassSpeed");
+                // Enemy
+                Enemy enemy = edit.create(Enemy.class);
+                enemy.maxHealth = 3;
+                enemy.currentHealth = enemy.maxHealth;
+                enemy.maxSpeed = JsonHelper.getConfigValue().getFloat("UndefinedMassSpeed");
 
-        enemy.detectionRadius = JsonHelper.getConfigValue().getFloat("UndefinedMassDetectionRadius");
-        enemy.attackRange = 1f;
+                enemy.detectionRadius = JsonHelper.getConfigValue().getFloat("UndefinedMassDetectionRadius");
+                enemy.attackRange = 1f;
 
-        enemy.knockbackStrength = JsonHelper.getConfigValue().getFloat("UndefinedMassKnockbackStrength");
+                enemy.knockbackStrength = JsonHelper.getConfigValue().getFloat("UndefinedMassKnockbackStrength");
 
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("enemies/enemy1/Walking.atlas"));
-        Array<TextureAtlas.AtlasRegion> frames = atlas.getRegions();
-        Animation WALKING_ANIMATION = new Animation<>(1f / JsonHelper.getConfigValue().getFloat("UndefinedMassAnimationSpeed") , frames, Animation.PlayMode.LOOP);
-        enemy.animations.put(State.WALKING, WALKING_ANIMATION);
+                TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("enemies/enemy1/Walking.atlas"));
+                Array<TextureAtlas.AtlasRegion> frames = atlas.getRegions();
+                Animation WALKING_ANIMATION = new Animation<>(1f / JsonHelper.getConfigValue().getFloat("UndefinedMassAnimationSpeed") , frames, Animation.PlayMode.LOOP);
+                enemy.animations.put(State.WALKING, WALKING_ANIMATION);
 
-        Texture temp = new Texture(Gdx.files.internal("enemies/enemy1/Idle.png"));
-        enemy.textures.put(State.IDLE, new TextureRegion(temp));
+                Texture temp = new Texture(Gdx.files.internal("enemies/enemy1/Idle.png"));
+                enemy.textures.put(State.IDLE, new TextureRegion(temp));
+                break;
+            case RED:
+                IgnoreGravity ignoreGravity2 = edit.create(IgnoreGravity.class);
+
+                // Enemy
+                Enemy enemy2 = edit.create(Enemy.class);
+                enemy2.maxHealth = 3;
+                enemy2.currentHealth = enemy2.maxHealth;
+                enemy2.maxSpeed = JsonHelper.getConfigValue().getFloat("RedUndefinedMassSpeed");
+
+                enemy2.detectionRadius = JsonHelper.getConfigValue().getFloat("RedUndefinedMassDetectionRadius");
+                enemy2.attackRange = 1f;
+
+                enemy2.knockbackStrength = JsonHelper.getConfigValue().getFloat("RedUndefinedMassKnockbackStrength");
+
+                TextureAtlas atlas2 = new TextureAtlas(Gdx.files.internal("enemies/enemy2/Walking.atlas"));
+                Array<TextureAtlas.AtlasRegion> frames2 = atlas2.getRegions();
+                Animation WALKING_ANIMATION2 = new Animation<>(1f / JsonHelper.getConfigValue().getFloat("UndefinedMassAnimationSpeed") , frames2, Animation.PlayMode.LOOP);
+                enemy2.animations.put(State.WALKING, WALKING_ANIMATION2);
+
+                Texture temp2 = new Texture(Gdx.files.internal("enemies/enemy2/Idle.png"));
+                enemy2.textures.put(State.IDLE, new TextureRegion(temp2));
+                break;
+            case BLUE:
+                IgnoreGravity ignoreGravity3 = edit.create(IgnoreGravity.class);
+
+                // Enemys
+                Enemy enemy3 = edit.create(Enemy.class);
+                enemy3.maxHealth = 3;
+                enemy3.currentHealth = enemy3.maxHealth;
+                enemy3.maxSpeed = JsonHelper.getConfigValue().getFloat("BlueUndefinedMassSpeed");
+
+                enemy3.detectionRadius = JsonHelper.getConfigValue().getFloat("BlueUndefinedMassDetectionRadius");
+                enemy3.attackRange = 1f;
+
+                enemy3.knockbackStrength = JsonHelper.getConfigValue().getFloat("BlueUndefinedMassKnockbackStrength");
+
+                TextureAtlas atlas3 = new TextureAtlas(Gdx.files.internal("enemies/enemy3/Walking.atlas"));
+                Array<TextureAtlas.AtlasRegion> frames3 = atlas3.getRegions();
+                Animation WALKING_ANIMATION3 = new Animation<>(1f / JsonHelper.getConfigValue().getFloat("UndefinedMassAnimationSpeed") , frames3, Animation.PlayMode.LOOP);
+                enemy3.animations.put(State.WALKING, WALKING_ANIMATION3);
+
+                Texture temp3 = new Texture(Gdx.files.internal("enemies/enemy3/Idle.png"));
+                enemy3.textures.put(State.IDLE, new TextureRegion(temp3));
+                break;
+            default:
+                break;
+        }
 
     }
 
