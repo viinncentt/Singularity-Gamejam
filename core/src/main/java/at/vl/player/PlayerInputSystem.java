@@ -424,17 +424,17 @@ public class PlayerInputSystem extends IteratingSystem {
         }
 
         // Down
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
             currentShootingState = ShootingState.DOWN;
         }
 
         // Right
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
             currentShootingState = ShootingState.RIGHT;
         }
 
         // Left
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
             currentShootingState = ShootingState.LEFT;
         }
 
