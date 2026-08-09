@@ -7,7 +7,9 @@ import com.artemis.World;
 import com.artemis.WorldConfiguration;
 import com.artemis.WorldConfigurationBuilder;
 import com.artemis.utils.IntBag;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -53,10 +55,15 @@ public class Room extends GameScreen implements Screen  {
     // Tiled Map
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
-    private float tileSize;
+    private final float tileSize;
 
     private boolean nextRoom;
-    private int roomNumber;
+    private final int roomNumber;
+
+    // Fade in
+    private float fadeTimer;
+    private final float fadeDuration;
+    private boolean fading = true;
 
     public Room(Main main, int roomNumber) {
         super(main);
@@ -71,8 +78,6 @@ public class Room extends GameScreen implements Screen  {
         world = new World(config);
 
         spawner = world.getSystem(SpawningSystem.class);
-
-        this.roomNumber = roomNumber;
 
         // Tiled Map
         room = JsonHelper.getRoomValue().get("Room" + roomNumber);
@@ -110,7 +115,10 @@ public class Room extends GameScreen implements Screen  {
         shapeRenderer = new ShapeRenderer();
         colliderRenderer = new ColliderRenderer(world, camera, shapeRenderer);
 
+        this.roomNumber = roomNumber;
         nextRoom = false;
+        fadeDuration = JsonHelper.getConfigValue().getFloat("FadeDuration");
+        fadeTimer = fadeDuration;
     }
 
     @Override
@@ -123,7 +131,7 @@ public class Room extends GameScreen implements Screen  {
         fitViewport.apply();
         camera.update();
         batch.setProjectionMatrix(camera.combined);
-        ScreenUtils.clear(0, 0.31f, 0.31f, 1);
+        ScreenUtils.clear(0, 0f, 0f, 1);
 
         // Artemis ODB
         world.setDelta(delta);
@@ -152,6 +160,32 @@ public class Room extends GameScreen implements Screen  {
 
         if (nextRoom) {
             main.setScreen(new Room(main, roomNumber + 1));
+        }
+
+        if (fading) {
+            fadeTimer -= delta;
+            float alpha = Math.max(0f, fadeTimer / fadeDuration);
+
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+            shapeRenderer.setProjectionMatrix(camera.combined);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(0f, 0f, 0f, alpha);
+            // Cover the full camera view — using viewport width/height in world units
+            shapeRenderer.rect(
+                camera.position.x - camera.viewportWidth / 2f,
+                camera.position.y - camera.viewportHeight / 2f,
+                camera.viewportWidth,
+                camera.viewportHeight
+            );
+            shapeRenderer.end();
+
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+
+            if (fadeTimer <= 0f) {
+                fading = false;
+            }
         }
 
         colliderRenderer.render();
