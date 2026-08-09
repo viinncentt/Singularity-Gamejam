@@ -15,6 +15,10 @@ public class JsonHelper {
         return main.getReader().parse(Gdx.files.internal("data" + File.separator + "config.json"));
     }
 
+    public static JsonValue getRoomValue() {
+        return main.getReader().parse(Gdx.files.internal("data" + File.separator + "rooms.json"));
+    }
+
     public static void setMain(Main main) {
         JsonHelper.main = main;
     }

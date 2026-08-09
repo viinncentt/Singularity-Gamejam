@@ -40,7 +40,7 @@ public class EnemyAISystem extends IteratingSystem {
         RigidBody rb = rigidBodyMapper.get(entityId);
 
         if (rb.isBeingSucked) {
-            return; // frozen while being sucked in — PlayerInputSystem owns its velocity right now
+            return;
         }
 
         Collider collider = colliderMapper.get(entityId);
@@ -73,8 +73,16 @@ public class EnemyAISystem extends IteratingSystem {
                 facing.lookingRight = false;
             }
 
+            float directionY = Math.signum(dy);
+            if (directionY != 0f) {
+                enemy.lastDirectionY = directionY;
+            } else {
+                directionY = -enemy.lastDirectionY;
+            }
+
             if (distance <= enemy.attackRange) {
                 animator.currentState = State.ATTACKING;
+                rb.velocity.y = 0; // stop vertical chase while attacking
                 if (!enemy.hasDealtDamage) {
                     player.currentHealth -= 1;
                     enemy.hasDealtDamage = true;
@@ -85,10 +93,12 @@ public class EnemyAISystem extends IteratingSystem {
             } else {
                 animator.currentState = State.WALKING;
                 rb.velocity.x = direction * enemy.maxSpeed;
+                rb.velocity.y = directionY * enemy.maxSpeed;
                 enemy.hasDealtDamage = false;
             }
         } else {
             rb.velocity.x = 0;
+            rb.velocity.y = 0;
             animator.currentState = State.IDLE;
             enemy.hasDealtDamage = false;
         }

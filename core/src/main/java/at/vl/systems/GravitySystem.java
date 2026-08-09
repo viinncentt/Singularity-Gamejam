@@ -48,6 +48,10 @@ public class GravitySystem extends IteratingSystem {
             return;
         }
 
+        if (ignoreGravity != null) {
+            return;
+        }
+
         rb.velocity.y -= gravityStrength * world.getDelta();
     }
 }

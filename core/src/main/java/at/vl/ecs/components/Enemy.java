@@ -26,4 +26,5 @@ public class Enemy extends Component {
     public float knockbackStrength;
 
     public float lastDirection = 1f;
+    public float lastDirectionY = 1f;
 }

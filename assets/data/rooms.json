@@ -1,0 +1,13 @@
+{
+  "Room1": {
+    "TiledMap": "ROOM1.tmx",
+    "PlayerSpawnX": "3",
+    "PlayerSpawnY": "3",
+    "Enemies": {
+      "UndefinedMass": {
+        "X": "7",
+        "Y": "10"
+      }
+    }
+  }
+}

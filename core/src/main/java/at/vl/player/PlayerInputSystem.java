@@ -135,7 +135,7 @@ public class PlayerInputSystem extends IteratingSystem {
         // For testing purposes
         if (Gdx.input.isKeyPressed(Input.Keys.R)) {
             collider.rect.x = 1f;
-            collider.rect.y = 1f;
+            collider.rect.y = 10f;
         }
 
         // Walking
@@ -249,7 +249,7 @@ public class PlayerInputSystem extends IteratingSystem {
     }
 
     private void jumpHandler() {
-        if (rb.grounded) {
+        if (rb.grounded && !isJumping) {
             coyoteTimer = coyoteTime;
         } else {
             coyoteTimer -= world.getDelta();
@@ -266,6 +266,7 @@ public class PlayerInputSystem extends IteratingSystem {
         if (jumpBufferTimer > 0f && coyoteTimer > 0f) {
             rb.velocity.y = baseJumpForce;
             rb.movedY = true;
+            rb.grounded = false;
             isJumping = true;
             jumpHoldTime = 0f;
 
@@ -283,8 +284,7 @@ public class PlayerInputSystem extends IteratingSystem {
 
             if (stillHolding && withinMaxHold && rb.velocity.y > 0f) {
                 float t = jumpHoldTime / maxJumpTime;
-                rb.velocity.y =
-                    baseJumpForce + (maxJumpForce - baseJumpForce) * t;
+                rb.velocity.y = baseJumpForce + (maxJumpForce - baseJumpForce) * t;
             } else {
                 isJumping = false;
 
@@ -326,6 +326,9 @@ public class PlayerInputSystem extends IteratingSystem {
                     // Reset timer
                     shootingTimer = 0f;
                     requireSpaceRelease = true;
+
+                    requireDRelease = true;
+                    requireARelease = true;
                 }
             } else {
                 // Reset time if not holding space

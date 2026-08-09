@@ -16,6 +16,7 @@ import at.vl.ecs.components.Animator;
 import at.vl.ecs.components.Collider;
 import at.vl.ecs.components.Enemy;
 import at.vl.ecs.components.Facing;
+import at.vl.ecs.components.IgnoreGravity;
 import at.vl.ecs.components.Player;
 import at.vl.ecs.components.RigidBody;
 import at.vl.util.JsonHelper;
@@ -92,6 +93,9 @@ public class SpawningSystem extends BaseSystem {
         Facing facing = edit.create(Facing.class);
         facing.lookingRight = true;
 
+        // Ignore Gravity
+        IgnoreGravity ignoreGravity = edit.create(IgnoreGravity.class);
+
         // Enemy
         Enemy enemy = edit.create(Enemy.class);
         enemy.maxHealth = 3;
@@ -110,6 +114,7 @@ public class SpawningSystem extends BaseSystem {
 
         Texture temp = new Texture(Gdx.files.internal("enemies/enemy1/Idle.png"));
         enemy.textures.put(State.IDLE, new TextureRegion(temp));
+
     }
 
     public void spawnGround(float x, float y, float width, float height) {

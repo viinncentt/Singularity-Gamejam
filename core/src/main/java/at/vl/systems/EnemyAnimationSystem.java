@@ -44,6 +44,7 @@ public class EnemyAnimationSystem extends IteratingSystem  {
                 break;
 
             default:
+                animator.currentFrame = enemy.textures.get(State.IDLE);
                 break;
         }
 
