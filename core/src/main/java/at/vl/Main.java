@@ -33,8 +33,7 @@ public class Main extends Game {
         worldWidth = JsonHelper.getConfigValue().getFloat("WorldWidth") / tileSize;
         worldHeight = JsonHelper.getConfigValue().getFloat("WorldHeight") / tileSize;
 
-        //setScreen(new StartScene(this));
-        setScreen(new Room(this, 3));
+        setScreen(new StartScene(this));
     }
 
 

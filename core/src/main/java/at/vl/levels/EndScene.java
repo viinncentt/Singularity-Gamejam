@@ -11,27 +11,25 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import at.vl.Main;
-import at.vl.levels.Room;
 
-public class StartScene implements Screen {
+public class EndScene implements Screen {
 
     private final Main main;
     private Music music;
     private Stage stage;
     private BitmapFont font;
 
-    public StartScene(Main main) {
+    public EndScene(Main main) {
         this.main = main;
     }
 
     @Override
     public void show() {
-        music = Gdx.audio.newMusic(Gdx.files.internal("music/intro.mp3"));
+        music = Gdx.audio.newMusic(Gdx.files.internal("music/outro.mp3"));
         music.setLooping(false);
         music.play();
 
         music.setOnCompletionListener(m -> {
-            main.setScreen(new Room(main, 1));
             dispose();
         });
 

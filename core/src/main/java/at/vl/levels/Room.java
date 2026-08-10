@@ -255,8 +255,7 @@ public class Room extends GameScreen implements Screen  {
                 Room room = new Room(main, roomNumber + 1);
                 main.setScreen(room);
             } else {
-                // TODO: Ending
-                System.out.println();
+                main.setScreen(new EndScene(main));
             }
 
         }

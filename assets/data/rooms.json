@@ -170,47 +170,141 @@
     "Enemies": [
       {
         "EnemyType": "UndefinedMass",
+        "X": "9",
+        "Y": "6",
+        "Type": "NORMAL"
+      },
+      {
+        "EnemyType": "UndefinedMass",
         "X": "13",
+        "Y": "13",
+        "Type": "BLUE"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "18",
+        "Y": "10",
+        "Type": "NORMAL"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "30",
+        "Y": "14",
+        "Type": "BLUE"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "36",
+        "Y": "15",
+        "Type": "BLUE"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "45",
+        "Y": "17",
+        "Type": "BLUE"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "52",
+        "Y": "18",
+        "Type": "BLUE"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "63",
+        "Y": "21",
+        "Type": "BLUE"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "70",
+        "Y": "20",
+        "Type": "BLUE"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "88",
+        "Y": "16",
+        "Type": "BLUE"
+      }
+    ]
+  },
+
+  "Room6": {
+    "TiledMap": "ROOM6.tmx",
+    "PlayerSpawnX": "1",
+    "PlayerSpawnY": "4",
+    "EndPointX": "99",
+    "EndPointY": "10",
+    "CameraEnd": "140",
+    "Enemies": [
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "11",
         "Y": "8",
-        "Type": "RED"
+        "Type": "BLUE"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "19",
+        "Y": "8",
+        "Type": "BLUE"
       },
       {
         "EnemyType": "UndefinedMass",
         "X": "27",
-        "Y": "8",
+        "Y": "7",
         "Type": "RED"
       },
       {
         "EnemyType": "UndefinedMass",
-        "X": "33",
-        "Y": "12",
+        "X": "34",
+        "Y": "11",
+        "Type": "BLUE"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "40",
+        "Y": "10",
         "Type": "NORMAL"
       },
       {
         "EnemyType": "UndefinedMass",
-        "X": "49",
-        "Y": "8",
-        "Type": "NORMAL"
+        "X": "50",
+        "Y": "12",
+        "Type": "BLUE"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "54",
+        "Y": "10",
+        "Type": "RED"
       },
       {
         "EnemyType": "UndefinedMass",
         "X": "62",
-        "Y": "8",
-        "Type": "RED"
-      },
-      {
-        "EnemyType": "UndefinedMass",
-        "X": "77",
-        "Y": "6",
-        "Type": "RED"
-      },
-      {
-        "EnemyType": "UndefinedMass",
-        "X": "92",
-        "Y": "10",
+        "Y": "14",
         "Type": "NORMAL"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "73",
+        "Y": "16",
+        "Type": "NORMAL"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "82",
+        "Y": "14",
+        "Type": "BLUE"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "88",
+        "Y": "12",
+        "Type": "RED"
       }
-
     ]
   }
 }
