@@ -152,6 +152,11 @@ public class SpawningSystem extends BaseSystem {
                 enemy3.attackRange = 1f;
 
                 enemy3.knockbackStrength = JsonHelper.getConfigValue().getFloat("BlueUndefinedMassKnockbackStrength");
+                enemy3.shootRange = JsonHelper.getConfigValue().getFloat("BlueUndefinedMassShootingRange");
+
+                enemy3.projectileSpeed = JsonHelper.getConfigValue().getFloat("BlueUndefinedMassProjectileSpeed");
+                enemy3.shootCooldown = JsonHelper.getConfigValue().getFloat("BlueUndefinedMassShootingCooldown");
+                enemy3.maxProjectiles = JsonHelper.getConfigValue().getInt("BlueUndefinedMassProjectileAmount");
 
                 TextureAtlas atlas3 = new TextureAtlas(Gdx.files.internal("enemies/enemy3/Walking.atlas"));
                 Array<TextureAtlas.AtlasRegion> frames3 = atlas3.getRegions();

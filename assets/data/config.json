@@ -50,7 +50,11 @@
   "RedUndefinedMassKnockbackStrength": "10",
 
   "BlueUndefinedMassAnimationSpeed": "15",
-  "BlueUndefinedMassSpeed": "2",
+  "BlueUndefinedMassSpeed": "0",
   "BlueUndefinedMassDetectionRadius": "10",
-  "BlueUndefinedMassKnockbackStrength": "10"
+  "BlueUndefinedMassKnockbackStrength": "10",
+  "BlueUndefinedMassShootingRange": "10",
+  "BlueUndefinedMassShootingCooldown": "1",
+  "BlueUndefinedMassProjectileSpeed": "5",
+  "BlueUndefinedMassProjectileAmount": "5"
 }

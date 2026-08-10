@@ -9,12 +9,14 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 
 import at.vl.ecs.components.Collider;
+import at.vl.ecs.components.Projectile;
 import at.vl.ecs.components.RigidBody;
 
 public class CollisionSystem extends IteratingSystem {
 
     private ComponentMapper<Collider> colliderMapper;
     private ComponentMapper<RigidBody> rigidBodyMapper;
+    private ComponentMapper<Projectile> projectileMapper;
 
     private EntitySubscription collidableSubscription;
 
@@ -22,7 +24,7 @@ public class CollisionSystem extends IteratingSystem {
     private final float velocityCap = -50f;
 
     public CollisionSystem() {
-        super(Aspect.all(Collider.class, RigidBody.class));
+        super(Aspect.all(Collider.class, RigidBody.class).exclude(Projectile.class));
     }
 
     @Override
@@ -35,7 +37,6 @@ public class CollisionSystem extends IteratingSystem {
     protected void process(int entityId) {
         RigidBody rb = rigidBodyMapper.get(entityId);
 
-        // Velocity capping
         if (rb.velocity.y <= velocityCap) {
             rb.velocity.y = velocityCap;
         }
@@ -69,6 +70,7 @@ public class CollisionSystem extends IteratingSystem {
         for (int i = 0; i < collidableIds.size(); i++) {
             int otherId = collidableIds.get(i);
             if (otherId == entityId) continue;
+            if (projectileMapper.get(otherId) != null) continue; // projectiles aren't solid
 
             Collider otherCollider = colliderMapper.get(otherId);
 
@@ -106,7 +108,6 @@ public class CollisionSystem extends IteratingSystem {
 
         IntBag collidableIds = collidableSubscription.getEntities();
 
-        // Ground check using a 1-pixel feet sensor
         Rectangle feet = new Rectangle(
             bodyCollider.rect.x + 0.0001f,
             bodyCollider.rect.y - 0.05f,
@@ -114,11 +115,11 @@ public class CollisionSystem extends IteratingSystem {
             0.1f
         );
 
-        // Assume player isn't grounded
         rb.grounded = false;
         for (int i = 0; i < collidableIds.size(); i++) {
             int otherId = collidableIds.get(i);
             if (otherId == entityId) continue;
+            if (projectileMapper.get(otherId) != null) continue; // don't stand on projectiles
 
             Collider otherCollider = colliderMapper.get(otherId);
 
@@ -128,12 +129,12 @@ public class CollisionSystem extends IteratingSystem {
             }
         }
 
-
         if (!rb.movedY) return;
 
         for (int i = 0; i < collidableIds.size(); i++) {
             int otherId = collidableIds.get(i);
             if (otherId == entityId) continue;
+            if (projectileMapper.get(otherId) != null) continue; // projectiles aren't solid
 
             Collider otherCollider = colliderMapper.get(otherId);
 

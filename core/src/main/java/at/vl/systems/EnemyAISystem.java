@@ -2,20 +2,21 @@ package at.vl.systems;
 
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
+import com.artemis.EntityEdit;
 import com.artemis.EntitySubscription;
 import com.artemis.systems.IteratingSystem;
 import com.artemis.utils.IntBag;
-
 import at.vl.ecs.State;
 import at.vl.ecs.components.Animator;
 import at.vl.ecs.components.Collider;
 import at.vl.ecs.components.Enemy;
 import at.vl.ecs.components.Facing;
+import at.vl.ecs.components.IgnoreGravity;
 import at.vl.ecs.components.Player;
+import at.vl.ecs.components.Projectile;
 import at.vl.ecs.components.RigidBody;
 
 public class EnemyAISystem extends IteratingSystem {
-
     private ComponentMapper<Enemy> enemyMapper;
     private ComponentMapper<RigidBody> rigidBodyMapper;
     private ComponentMapper<Collider> colliderMapper;
@@ -24,6 +25,7 @@ public class EnemyAISystem extends IteratingSystem {
     private ComponentMapper<Player> playerMapper;
 
     private EntitySubscription playerSubscription;
+    private EntitySubscription projectileSubscription;
 
     public EnemyAISystem() {
         super(Aspect.all(Enemy.class, RigidBody.class, Collider.class, Animator.class));
@@ -32,6 +34,7 @@ public class EnemyAISystem extends IteratingSystem {
     @Override
     protected void initialize() {
         playerSubscription = world.getAspectSubscriptionManager().get(Aspect.all(Player.class, Collider.class));
+        projectileSubscription = world.getAspectSubscriptionManager().get(Aspect.all(Projectile.class, Collider.class));
     }
 
     @Override
@@ -80,11 +83,21 @@ public class EnemyAISystem extends IteratingSystem {
                 directionY = -enemy.lastDirectionY;
             }
 
+            if (distance <= enemy.shootRange) {
+                enemy.shootTimer -= world.getDelta();
+                if (enemy.shootTimer <= 0f) {
+                    if (projectileSubscription.getEntities().size() < enemy.maxProjectiles) {
+                        spawnProjectile(collider, dx, dy, enemy);
+                        enemy.shootTimer = enemy.shootCooldown;
+                    }
+                    // if at the cap, timer stays <= 0 and we retry every frame until a slot frees up
+                }
+            }
+
             if (distance <= enemy.attackRange) {
                 if (player.dying) return;
-
                 animator.currentState = State.ATTACKING;
-                rb.velocity.y = 0; // stop vertical chase while attacking
+                rb.velocity.y = 0;
                 if (!enemy.hasDealtDamage) {
                     player.currentHealth -= 1;
                     enemy.hasDealtDamage = true;
@@ -104,5 +117,33 @@ public class EnemyAISystem extends IteratingSystem {
             animator.currentState = State.IDLE;
             enemy.hasDealtDamage = false;
         }
+    }
+
+    private void spawnProjectile(Collider enemyCollider, float dx, float dy, Enemy enemy) {
+        float length = (float) Math.sqrt(dx * dx + dy * dy);
+        float vx = length != 0f ? (dx / length) * enemy.projectileSpeed : enemy.projectileSpeed;
+        float vy = length != 0f ? (dy / length) * enemy.projectileSpeed : 0f;
+
+        float spawnX = enemyCollider.rect.x;
+        float spawnY = enemyCollider.rect.y;
+
+        int projectileId = world.create();
+        EntityEdit edit = world.edit(projectileId);
+
+
+        edit.create(IgnoreGravity.class);
+
+        Projectile projectile = edit.create(Projectile.class);
+        projectile.spawnX = spawnX;
+        projectile.spawnY = spawnY;
+        projectile.maxDistance = enemy.projectileMaxDistance;
+        projectile.damage = 1;
+
+        RigidBody rb = edit.create(RigidBody.class);
+        rb.velocity.x = vx;
+        rb.velocity.y = vy;
+
+        Collider collider = edit.create(Collider.class);
+        collider.rect.set(spawnX, spawnY, enemy.projectileWidth, enemy.projectileHeight);
     }
 }

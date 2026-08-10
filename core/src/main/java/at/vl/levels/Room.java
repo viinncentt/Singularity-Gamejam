@@ -36,6 +36,7 @@ import at.vl.systems.EnemyAnimationSystem;
 import at.vl.systems.EnemyRenderSystem;
 import at.vl.systems.GravitySystem;
 import at.vl.systems.MovementSystem;
+import at.vl.systems.ProjectileSystem;
 import at.vl.systems.SpawningSystem;
 import at.vl.systems.UndefinedMassType;
 import at.vl.util.JsonHelper;
@@ -75,7 +76,7 @@ public class Room extends GameScreen implements Screen  {
             new PlayerInputSystem(), new PlayerAnimationSystem(), new PlayerRenderSystem(batch),
             new EnemyAISystem(), new EnemyAnimationSystem(), new EnemyRenderSystem(batch),
             new MovementSystem(), new SpawningSystem(),
-            new CollisionSystem(), new GravitySystem(),  new DebugOverlay(), new PlayerHudSystem()
+            new CollisionSystem(), new GravitySystem(),  new DebugOverlay(), new PlayerHudSystem(), new ProjectileSystem()
         ).build();
 
         world = new World(config);
