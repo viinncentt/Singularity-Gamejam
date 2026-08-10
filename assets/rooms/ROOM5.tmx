@@ -6,7 +6,7 @@
  <tileset firstgid="1" source="gamejam.tsx"/>
  <tileset firstgid="7" source="gamejamsetbro.tsx"/>
  <imagelayer id="6" name="color back" repeatx="1" repeaty="1">
-  <image source="Downloads/cokor back.png" width="96" height="64"/>
+  <image source="cokor_back.png" width="96" height="64"/>
  </imagelayer>
  <layer id="5" name="bg 4" width="100" height="100" opacity="0.4" parallaxx="0.4">
   <data encoding="csv">
