@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="9">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="15">
  <tileset firstgid="1" source="gamejam.tsx"/>
  <tileset firstgid="7" source="gamejamsetbro.tsx"/>
  <imagelayer id="6" name="color back" repeatx="1" repeaty="1">
@@ -531,5 +531,11 @@
   <object id="3" x="704" y="3040" width="159" height="216"/>
   <object id="4" x="993" y="2977" width="61" height="258"/>
   <object id="7" x="1120" y="2817" width="64" height="419"/>
+  <object id="9" x="1440" y="3008" width="62.6667" height="265.333"/>
+  <object id="10" x="1760" y="3008" width="126.667" height="248"/>
+  <object id="11" x="2272" y="3104" width="126.667" height="182.667"/>
+  <object id="12" x="2560" y="2976" width="62.6667" height="294.667"/>
+  <object id="13" x="2784" y="2976" width="61.3333" height="300"/>
+  <object id="14" x="3102.67" y="2976" width="270.667" height="434.667"/>
  </objectgroup>
 </map>

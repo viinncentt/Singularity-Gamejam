@@ -112,7 +112,7 @@
     "PlayerSpawnY": "4",
     "EndPointX": "99",
     "EndPointY": "7",
-    "CameraEnd": "250",
+    "CameraEnd": "101",
     "Enemies": [
       {
         "EnemyType": "UndefinedMass",
@@ -237,7 +237,7 @@
     "PlayerSpawnY": "4",
     "EndPointX": "99",
     "EndPointY": "10",
-    "CameraEnd": "140",
+    "CameraEnd": "101",
     "Enemies": [
       {
         "EnemyType": "UndefinedMass",

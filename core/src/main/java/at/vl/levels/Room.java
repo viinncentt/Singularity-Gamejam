@@ -83,8 +83,7 @@ public class Room extends GameScreen implements Screen  {
             new PlayerInputSystem(), new PlayerAnimationSystem(), new PlayerRenderSystem(batch),
             new EnemyAISystem(), new EnemyAnimationSystem(), new EnemyRenderSystem(batch),
             new MovementSystem(), new SpawningSystem(),
-
-            new CollisionSystem(), new GravitySystem(),  new DebugOverlay(),
+            new CollisionSystem(), new GravitySystem(),
             new CameraHandler(camera), new PlayerHudSystem()
         ).build();
 
@@ -283,7 +282,7 @@ public class Room extends GameScreen implements Screen  {
             }
         }
 
-       colliderRenderer.render();
+       //colliderRenderer.render();
     }
 
     @Override
