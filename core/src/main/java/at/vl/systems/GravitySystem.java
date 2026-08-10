@@ -38,6 +38,14 @@ public class GravitySystem extends IteratingSystem {
             return;
         }
 
+        if (ignoreGravity != null) {
+            return;
+        }
+
+        if (rb.noGravity) {
+            return;
+        }
+
         if (rb.fasterGravity) {
             rb.velocity.y -= (gravityStrength * 1.5f) * world.getDelta();
             return;
@@ -45,10 +53,6 @@ public class GravitySystem extends IteratingSystem {
 
         if (rb.slowerGravity) {
             rb.velocity.y -= (gravityStrength * 0.25f) * world.getDelta();
-            return;
-        }
-
-        if (ignoreGravity != null) {
             return;
         }
 

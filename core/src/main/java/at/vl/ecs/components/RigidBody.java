@@ -16,4 +16,6 @@ public class RigidBody extends Component {
     public float knockbackDuration;
 
     public boolean isBeingSucked = false;
+
+    public boolean noGravity = false;
 }

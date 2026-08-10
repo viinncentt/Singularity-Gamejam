@@ -136,6 +136,7 @@ public class PlayerInputSystem extends IteratingSystem {
         player = playerMapper.get(entityId);
 
         currentSpeed = speed;
+        rb.noGravity = false;
 
         if (player.dying) {
             stateHandler();
@@ -465,10 +466,18 @@ public class PlayerInputSystem extends IteratingSystem {
                 requireSpaceRelease = true;
                 break;
             case DOWN:
+                System.out.println("works");
+                rb.velocity.y = upwardDashStrength;
+                filled = false;
+                wasJumpPressed = true;
+                shootingTimer = 0f;
+                requireSpaceRelease = true;
                 break;
             case RIGHT:
                 requireARelease = true;
                 requireDRelease = true;
+                rb.noGravity = true;
+                rb.slowerGravity = false;
                 sidewayDashTimer = sidewayDashDuration;
                 sidewayDashVelocityX = -sidewayDashStrength;
                 moveX = -sidewayDashStrength;
@@ -479,6 +488,8 @@ public class PlayerInputSystem extends IteratingSystem {
             case LEFT:
                 requireARelease = true;
                 requireDRelease = true;
+                rb.noGravity = true;
+                rb.slowerGravity = false;
                 sidewayDashTimer = sidewayDashDuration;
                 sidewayDashVelocityX = sidewayDashStrength;
                 moveX = sidewayDashStrength;
