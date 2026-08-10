@@ -123,6 +123,7 @@ public class PlayerInputSystem extends IteratingSystem {
 
     @Override
     protected void initialize() {
+
         enemySubscription = asm.get(Aspect.all(Enemy.class, Collider.class));
     }
 

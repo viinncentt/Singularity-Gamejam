@@ -12,7 +12,7 @@ import org.teavm.vm.TeaVMOptimizationLevel;
 public class TeaVMBuilder {
     public static void main(String[] args) {
         // Typically set by the Gradle task, but can also be set here or with the command-line arg "debug"
-        boolean debug = false;
+        boolean debug = true;
         // Typically set by the Gradle task, but can also be set here or with the command-line arg "run"
         boolean startJetty = false;
         for (String arg : args) {
@@ -38,7 +38,16 @@ public class TeaVMBuilder {
             .setSourceFilePolicy(TeaVMSourceFilePolicy.COPY)
             .addSourceFileProvider(new DirectorySourceFileProvider(new File("../core/src/main/java/")))
             // You can also register any classes or packages that require reflection here:
-            //.addReflectionClass("at.vl.reflect")
+            .addReflectionClass("at.vl.reflect")
+            .addReflectionClass("at.vl.ecs.components.**")
+            .addReflectionClass("at.vl.ecs.systems.**")
+            .addReflectionClass("at.vl.ecs.**")
+            .addReflectionClass("com.artemis.BaseEntitySystem")
+            .addReflectionClass("com.artemis.EntitySystem")
+            .addReflectionClass("com.artemis.BaseSystem")
+            .addReflectionClass("at.vl.player.**")
+            .addReflectionClass("at.vl.systems.**")
+            .addReflectionClass("at.vl.collisionsystem.**")
             .build(new File("build/dist"));
     }
 }
