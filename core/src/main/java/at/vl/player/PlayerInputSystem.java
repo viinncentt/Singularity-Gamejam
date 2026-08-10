@@ -136,7 +136,7 @@ public class PlayerInputSystem extends IteratingSystem {
         player = playerMapper.get(entityId);
 
         currentSpeed = speed;
-        rb.noGravity = false;
+        rb.noGravity = sidewayDashTimer > 0f;
 
         if (player.dying) {
             stateHandler();

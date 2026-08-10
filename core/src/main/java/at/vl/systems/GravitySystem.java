@@ -34,15 +34,16 @@ public class GravitySystem extends IteratingSystem {
             return;
         }
 
-        if (rb.velocity.y <= - maxVelocity) {
-            return;
-        }
-
         if (ignoreGravity != null) {
             return;
         }
 
         if (rb.noGravity) {
+            return;
+        }
+
+
+        if (rb.velocity.y <= - maxVelocity) {
             return;
         }
 
