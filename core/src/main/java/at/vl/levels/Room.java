@@ -249,7 +249,14 @@ public class Room extends GameScreen implements Screen  {
         }
 
         if (nextRoom) {
-            main.setScreen(new Room(main, roomNumber + 1));
+            if (JsonHelper.getRoomValue().get("Room" + (roomNumber + 1)) != null) {
+                Room room = new Room(main, roomNumber + 1);
+                main.setScreen(room);
+            } else {
+                // TODO: Ending
+                System.out.println();
+            }
+
         }
 
         if (fading) {

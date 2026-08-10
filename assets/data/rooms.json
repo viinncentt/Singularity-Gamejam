@@ -22,7 +22,7 @@
     "PlayerSpawnY": "3",
     "EndPointX": "99",
     "EndPointY": "20",
-    "CameraEnd": "99",
+    "CameraEnd": "250",
     "Enemies": [
       {
         "EnemyType": "UndefinedMass",

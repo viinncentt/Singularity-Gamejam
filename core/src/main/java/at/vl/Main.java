@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.utils.JsonReader;
 
 import at.vl.levels.Room;
+import at.vl.levels.StartScene;
 import at.vl.util.JsonHelper;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
@@ -32,7 +33,7 @@ public class Main extends Game {
         worldWidth = JsonHelper.getConfigValue().getFloat("WorldWidth") / tileSize;
         worldHeight = JsonHelper.getConfigValue().getFloat("WorldHeight") / tileSize;
 
-        setScreen(new Room(this, 1));
+        setScreen(new StartScene(this));
     }
 
 
