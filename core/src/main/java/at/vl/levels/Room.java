@@ -151,11 +151,15 @@ public class Room extends GameScreen implements Screen  {
         renderer.setView(camera);
         renderer.render();
 
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
         // Draw
         batch.begin();
-
         world.process();
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
         batch.end();
+
 
         // If player activates next room condition
         IntBag players = playerSubscription.getEntities();

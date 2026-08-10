@@ -35,5 +35,6 @@ public class CameraHandler extends IteratingSystem {
         camera.position.y = MathUtils.lerp(camera.position.y, collider.rect.y, lerpFactor);
         camera.update();
 
+
     }
 }

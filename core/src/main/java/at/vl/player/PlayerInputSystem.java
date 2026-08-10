@@ -214,9 +214,9 @@ public class PlayerInputSystem extends IteratingSystem {
             rb.velocity.x = moveX;
             rb.movedX = moveX != 0f;
         }
+
         // Jumping
         jumpHandler();
-
 
         // Falling
         if (!rb.grounded && rb.velocity.y < 0f) {
@@ -332,12 +332,13 @@ public class PlayerInputSystem extends IteratingSystem {
                 animator.currentState = State.SHOOTING;
                 shootingTimer += world.getDelta();
 
-                shooting();
                 // To stop player from looking like flying up
                 if (rb.velocity.y > 0f) {
                     rb.velocity.y = 0f;
                 }
 
+                shooting();
+                
                 if (shootingTimer >= shootingTime) {
                     // Shooting completed
                     filled = false;
