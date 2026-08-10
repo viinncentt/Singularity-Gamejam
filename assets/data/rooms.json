@@ -3,7 +3,7 @@
     "TiledMap": "ROOM1.tmx",
     "PlayerSpawnX": "3",
     "PlayerSpawnY": "3",
-    "EndPointX": "39",
+    "EndPointX": "56",
     "EndPointY": "6",
     "Enemies": [
       {
@@ -27,7 +27,33 @@
         "X": "7",
         "Y": "10",
         "Type": "NORMAL"
+      }, {
+        "EnemyType": "UndefinedMass",
+        "X": "33",
+        "Y": "9",
+        "Type": "RED"
+      },
+
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "51",
+        "Y": "10",
+        "Type": "BLUE"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "61",
+        "Y": "16",
+        "Type": "NORMAL"
+      },
+
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "81",
+        "Y": "17",
+        "Type": "NORMAL"
       }
+
     ]
   }
 }
