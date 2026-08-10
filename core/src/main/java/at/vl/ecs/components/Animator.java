@@ -9,4 +9,6 @@ public class Animator extends Component {
     public State currentState;
     public TextureRegion currentFrame;
     public float stateTime;
+    public TextureRegion effectsFrame;
+    public float dyingStateTime;
 }

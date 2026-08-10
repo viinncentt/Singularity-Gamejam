@@ -3,6 +3,7 @@ package at.vl.player;
 import com.artemis.Aspect;
 import com.artemis.AspectSubscriptionManager;
 import com.artemis.ComponentMapper;
+import com.artemis.Entity;
 import com.artemis.EntitySubscription;
 import com.artemis.systems.IteratingSystem;
 import com.artemis.utils.IntBag;
@@ -23,6 +24,7 @@ public class PlayerInputSystem extends IteratingSystem {
     private ComponentMapper<Collider> colliderMapper;
     private ComponentMapper<Facing> facingMapper;
     private ComponentMapper<Animator> animatorMapper;
+    private ComponentMapper<Player> playerMapper;
 
     private AspectSubscriptionManager asm;
     private EntitySubscription enemySubscription;
@@ -31,6 +33,7 @@ public class PlayerInputSystem extends IteratingSystem {
     private RigidBody rb;
     private Facing facing;
     private Animator animator;
+    private Player player;
 
     private final float speed;
     private float currentSpeed;
@@ -129,9 +132,16 @@ public class PlayerInputSystem extends IteratingSystem {
         rb = rigidBodyMapper.get(entityId);
         facing = facingMapper.get(entityId);
         animator = animatorMapper.get(entityId);
+        player = playerMapper.get(entityId);
 
         currentSpeed = speed;
 
+        if (player.dying) {
+            stateHandler();
+            rb.velocity.x = 0;
+            rb.velocity.y = 0;
+            return;
+        }
         // For testing purposes
         if (Gdx.input.isKeyPressed(Input.Keys.R)) {
             collider.rect.x = 1f;
@@ -235,7 +245,13 @@ public class PlayerInputSystem extends IteratingSystem {
     }
 
     private void stateHandler() {
-        if (landStateTime > 0f) {
+        player.dying = false;
+
+        if (player.currentHealth <= 0) {
+            // Die
+            animator.currentState = State.DYING;
+            player.dying = true;
+        } else if (landStateTime > 0f) {
             animator.currentState = State.LANDING;
         } else if (isJumping || (!rb.grounded && rb.velocity.y > 0f)) {
             animator.currentState = State.JUMPING;
@@ -343,6 +359,7 @@ public class PlayerInputSystem extends IteratingSystem {
                 if (isEnemyInSuckingRadius()) {
                     // Sucking enemy in
                     suckingTimer += world.getDelta();
+                    animator.currentState = State.SUCKINGENEMY;
 
                     if (suckingTimer >= suckingTime) {
                         world.delete(suckingTargetId);

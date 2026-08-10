@@ -4,10 +4,12 @@ import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
 import at.vl.ecs.components.Animator;
 import at.vl.ecs.components.Collider;
 import at.vl.ecs.components.Player;
+import at.vl.util.JsonHelper;
 
 public class PlayerRenderSystem extends IteratingSystem {
 
@@ -28,6 +30,16 @@ public class PlayerRenderSystem extends IteratingSystem {
         Collider collider = colliderMapper.get(entityId);
 
         batch.draw(animator.currentFrame, collider.rect.x - 0.15f, collider.rect.y, 1f, 1f);
+
+        if (animator.effectsFrame != null) {
+            float width = JsonHelper.getConfigValue().getFloat("PlayerSuckingParticlesWidth");
+            float height = JsonHelper.getConfigValue().getFloat("PlayerSuckingParticlesHeight");
+            float centerX = collider.rect.x + collider.rect.width / 2f;
+            float centerY = collider.rect.y + collider.rect.height / 2f;
+
+            batch.draw(animator.effectsFrame, centerX - width / 2f, centerY - height / 2f, width, height);
+        }
         batch.flush();
     }
+
 }

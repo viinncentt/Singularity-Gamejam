@@ -47,12 +47,14 @@ public class Room extends GameScreen implements Screen  {
     private SpawningSystem spawner;
     private EntitySubscription playerSubscription;
     private ComponentMapper<Collider> colliderMapper;
+    private ComponentMapper<Player> playerMapper;
 
     // Debugging
     private ShapeRenderer shapeRenderer;
     private ColliderRenderer colliderRenderer;
 
     private JsonValue room;
+
     // Tiled Map
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
@@ -112,6 +114,7 @@ public class Room extends GameScreen implements Screen  {
 
         playerSubscription = world.getAspectSubscriptionManager().get(Aspect.all(Player.class, Collider.class));
         colliderMapper = world.getMapper(Collider.class);
+        playerMapper = world.getMapper(Player.class);
 
         // Debugging
         shapeRenderer = new ShapeRenderer();
@@ -157,6 +160,33 @@ public class Room extends GameScreen implements Screen  {
             if (playerCollider.rect.overlaps(
                 new Rectangle(room.getFloat("EndPointX"), room.getFloat("EndPointY"), 1f, 1f))) {
                 nextRoom = true;
+            }
+        }
+
+        // Falls off
+        if (!players.isEmpty()) {
+            int playerId = players.get(0);
+            Collider playerCollider = colliderMapper.get(playerId);
+            Player player = playerMapper.get(playerId);
+
+            if (playerCollider.rect.overlaps(
+                new Rectangle(0, 0, 100f, 1f))) {
+                playerCollider.rect.x = room.getFloat("PlayerSpawnX");
+                playerCollider.rect.y = room.getFloat("PlayerSpawnY");
+                player.currentHealth -= 1;
+            }
+        }
+
+        // Dies
+        if (!players.isEmpty()) {
+            int playerId = players.get(0);
+            Collider playerCollider = colliderMapper.get(playerId);
+            Player player = playerMapper.get(playerId);
+
+            if (player.readyToRespawn) {
+                playerCollider.rect.x = room.getFloat("PlayerSpawnX");
+                playerCollider.rect.y = room.getFloat("PlayerSpawnY");
+                player.currentHealth = player.maxHealth;
             }
         }
 

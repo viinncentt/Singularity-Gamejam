@@ -1,0 +1,16 @@
+Death.png
+size: 330, 66
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+JOHNNYDIE1
+  bounds: 1, 1, 64, 64
+JOHNNYDIE2
+  bounds: 67, 1, 64, 64
+JOHNNYDIE3
+  bounds: 133, 1, 64, 64
+JOHNNYDIE4
+  bounds: 199, 1, 64, 64
+JOHNNYDIE5
+  bounds: 265, 1, 64, 64

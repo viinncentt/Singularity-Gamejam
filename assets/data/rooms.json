@@ -8,15 +8,9 @@
     "Enemies": [
       {
         "EnemyType": "UndefinedMass",
-        "X": "7",
+        "X": "27",
         "Y": "10",
         "Type": "NORMAL"
-      },
-      {
-        "EnemyType": "UndefinedMass",
-        "X": "8",
-        "Y": "10",
-        "Type": "BLUE"
       }
     ]
   },

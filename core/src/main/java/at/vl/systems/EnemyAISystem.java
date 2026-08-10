@@ -81,6 +81,8 @@ public class EnemyAISystem extends IteratingSystem {
             }
 
             if (distance <= enemy.attackRange) {
+                if (player.dying) return;
+
                 animator.currentState = State.ATTACKING;
                 rb.velocity.y = 0; // stop vertical chase while attacking
                 if (!enemy.hasDealtDamage) {

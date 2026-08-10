@@ -1,0 +1,14 @@
+SuckingParticles.png
+size: 520, 130
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+suckeffect1
+  bounds: 1, 1, 128, 128
+suckeffect2
+  bounds: 131, 1, 128, 128
+suckeffect3
+  bounds: 261, 1, 128, 128
+suckeffect4
+  bounds: 391, 1, 128, 128
