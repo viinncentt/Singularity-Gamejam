@@ -250,6 +250,11 @@ public class Room extends GameScreen implements Screen  {
             world.getSystem(CameraHandler.class).lock();
         }
 
+        // Camera reaches Bottom
+        if (cameraRect.overlaps(new Rectangle(0, 4, 1000, 1))) {
+            world.getSystem(CameraHandler.class).lock();
+        }
+
         if (nextRoom) {
             if (JsonHelper.getRoomValue().get("Room" + (roomNumber + 1)) != null) {
                 Room room = new Room(main, roomNumber + 1);

@@ -43,16 +43,19 @@ public class CameraHandler extends IteratingSystem {
 
     private boolean isInitialized;
 
+    private boolean locked;
+
     public void lock() {
         if (!isInitialized) {
             x = camera.position.x;
             y = camera.position.y;
-
             isInitialized = true;
         }
-
-        // Set position
-        camera.position.x = x;
-        camera.position.y = y;
+        locked = true;
     }
+
+    public void unlock() {
+        locked = false;
+    }
+
 }

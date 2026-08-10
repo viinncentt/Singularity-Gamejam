@@ -143,11 +143,12 @@ public class PlayerInputSystem extends IteratingSystem {
             rb.velocity.y = 0;
             return;
         }
+
         // For testing purposes
-        if (Gdx.input.isKeyPressed(Input.Keys.R)) {
-            collider.rect.x = 1f;
-            collider.rect.y = 10f;
-        }
+//        if (Gdx.input.isKeyPressed(Input.Keys.R)) {
+//            collider.rect.x = 1f;
+//            collider.rect.y = 10f;
+//        }
 
         // Walking
         boolean dHeld = Gdx.input.isKeyPressed(Input.Keys.D);
