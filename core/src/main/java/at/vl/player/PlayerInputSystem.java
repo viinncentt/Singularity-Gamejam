@@ -338,7 +338,7 @@ public class PlayerInputSystem extends IteratingSystem {
                 }
 
                 shooting();
-                
+
                 if (shootingTimer >= shootingTime) {
                     // Shooting completed
                     filled = false;
@@ -479,6 +479,7 @@ public class PlayerInputSystem extends IteratingSystem {
                 requireDRelease = true;
                 rb.noGravity = true;
                 rb.slowerGravity = false;
+                rb.velocity.y = 0f;
                 sidewayDashTimer = sidewayDashDuration;
                 sidewayDashVelocityX = -sidewayDashStrength;
                 moveX = -sidewayDashStrength;
@@ -491,6 +492,7 @@ public class PlayerInputSystem extends IteratingSystem {
                 requireDRelease = true;
                 rb.noGravity = true;
                 rb.slowerGravity = false;
+                rb.velocity.y = 0f;
                 sidewayDashTimer = sidewayDashDuration;
                 sidewayDashVelocityX = sidewayDashStrength;
                 moveX = sidewayDashStrength;
