@@ -49,16 +49,16 @@ public class PlayerHudSystem extends IteratingSystem {
 
     @Override
     protected void process(int entityId) {
-        player = playerMapper.get(entityId);
-
-        stage.act(world.getDelta());
-
-        tableHearts.clearChildren();
-        for (int i = 0; i < player.currentHealth; i++) {
-            tableHearts.add(new Image(heartDrawable)).size(70f, 70f).padRight(4f);
-        }
-
-        stage.draw();
+//        player = playerMapper.get(entityId);
+//
+//        stage.act(world.getDelta());
+//
+//        tableHearts.clearChildren();
+//        for (int i = 0; i < player.currentHealth; i++) {
+//            tableHearts.add(new Image(heartDrawable)).size(70f, 70f).padRight(4f);
+//        }
+//
+//        stage.draw();
     }
 
     public void resize(int width, int height) {

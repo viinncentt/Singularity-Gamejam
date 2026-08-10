@@ -10,4 +10,6 @@ public class Player extends Component {
     public boolean readyToRespawn;
     public boolean dying;
     public boolean hurting;
+
+    public boolean filled = false;
 }

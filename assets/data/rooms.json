@@ -22,7 +22,7 @@
     "PlayerSpawnY": "3",
     "EndPointX": "99",
     "EndPointY": "20",
-    "CameraEnd": "250",
+    "CameraEnd": "119",
     "Enemies": [
       {
         "EnemyType": "UndefinedMass",
@@ -53,6 +53,161 @@
         "EnemyType": "UndefinedMass",
         "X": "81",
         "Y": "17",
+        "Type": "NORMAL"
+      }
+
+    ]
+  },
+
+  "Room3": {
+    "TiledMap": "ROOM3.tmx",
+    "PlayerSpawnX": "3",
+    "PlayerSpawnY": "4",
+    "EndPointX": "99",
+    "EndPointY": "20",
+    "CameraEnd": "250",
+    "Enemies": [
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "13",
+        "Y": "6",
+        "Type": "RED"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "24",
+        "Y": "14",
+        "Type": "RED"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "35",
+        "Y": "19",
+        "Type": "NORMAL"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "53",
+        "Y": "18",
+        "Type": "NORMAL"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "66",
+        "Y": "19",
+        "Type": "NORMAL"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "79",
+        "Y": "17",
+        "Type": "RED"
+      }
+    ]
+  },
+
+  "Room4": {
+    "TiledMap": "ROOM4.tmx",
+    "PlayerSpawnX": "3",
+    "PlayerSpawnY": "3",
+    "EndPointX": "99",
+    "EndPointY": "20",
+    "CameraEnd": "250",
+    "Enemies": [
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "13",
+        "Y": "8",
+        "Type": "RED"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "27",
+        "Y": "8",
+        "Type": "RED"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "33",
+        "Y": "12",
+        "Type": "NORMAL"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "49",
+        "Y": "8",
+        "Type": "NORMAL"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "62",
+        "Y": "8",
+        "Type": "RED"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "77",
+        "Y": "6",
+        "Type": "RED"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "92",
+        "Y": "10",
+        "Type": "NORMAL"
+      }
+
+    ]
+  },
+
+  "Room5": {
+    "TiledMap": "ROOM5.tmx",
+    "PlayerSpawnX": "3",
+    "PlayerSpawnY": "3",
+    "EndPointX": "99",
+    "EndPointY": "20",
+    "CameraEnd": "250",
+    "Enemies": [
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "13",
+        "Y": "8",
+        "Type": "RED"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "27",
+        "Y": "8",
+        "Type": "RED"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "33",
+        "Y": "12",
+        "Type": "NORMAL"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "49",
+        "Y": "8",
+        "Type": "NORMAL"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "62",
+        "Y": "8",
+        "Type": "RED"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "77",
+        "Y": "6",
+        "Type": "RED"
+      },
+      {
+        "EnemyType": "UndefinedMass",
+        "X": "92",
+        "Y": "10",
         "Type": "NORMAL"
       }
 

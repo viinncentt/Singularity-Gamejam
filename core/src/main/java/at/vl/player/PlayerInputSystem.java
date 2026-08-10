@@ -68,7 +68,6 @@ public class PlayerInputSystem extends IteratingSystem {
     private final boolean landMovementLock;
 
     // Abilities
-    private boolean filled = false;
     private float suckingTimer;
     private final float suckingTime;
     private final float suckingRadius;
@@ -326,7 +325,7 @@ public class PlayerInputSystem extends IteratingSystem {
             }
         }
 
-        if (filled) {
+        if (player.filled) {
             // Shooting
             if (spaceHeld) {
                 animator.currentState = State.SHOOTING;
@@ -341,7 +340,7 @@ public class PlayerInputSystem extends IteratingSystem {
 
                 if (shootingTimer >= shootingTime) {
                     // Shooting completed
-                    filled = false;
+                    player.filled = false;
                     // Reset timer
                     shootingTimer = 0f;
                     requireSpaceRelease = true;
@@ -369,7 +368,7 @@ public class PlayerInputSystem extends IteratingSystem {
                         // Reset target
                         suckingTargetId = -1;
                         // Suck completed
-                        filled = true;
+                        player.filled = true;
                         // Reset timer
                         suckingTimer = 0f;
                         requireSpaceRelease = true;
@@ -463,14 +462,14 @@ public class PlayerInputSystem extends IteratingSystem {
         switch (currentShootingState) {
             case UP:
                 rb.velocity.y = -upwardDashStrength;
-                filled = false;
+                player.filled = false;
                 wasJumpPressed = true;
                 shootingTimer = 0f;
                 requireSpaceRelease = true;
                 break;
             case DOWN:
                 rb.velocity.y = upwardDashStrength;
-                filled = false;
+                player.filled = false;
                 wasJumpPressed = true;
                 shootingTimer = 0f;
                 requireSpaceRelease = true;
@@ -484,7 +483,7 @@ public class PlayerInputSystem extends IteratingSystem {
                 sidewayDashTimer = sidewayDashDuration;
                 sidewayDashVelocityX = -sidewayDashStrength;
                 moveX = -sidewayDashStrength;
-                filled = false;
+                player.filled = false;
                 shootingTimer = 0f;
                 requireSpaceRelease = true;
                 break;
@@ -497,7 +496,7 @@ public class PlayerInputSystem extends IteratingSystem {
                 sidewayDashTimer = sidewayDashDuration;
                 sidewayDashVelocityX = sidewayDashStrength;
                 moveX = sidewayDashStrength;
-                filled = false;
+                player.filled = false;
                 shootingTimer = 0f;
                 requireSpaceRelease = true;
                 break;

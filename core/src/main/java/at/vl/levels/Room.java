@@ -185,6 +185,7 @@ public class Room extends GameScreen implements Screen  {
                 playerCollider.rect.x = room.getFloat("PlayerSpawnX");
                 playerCollider.rect.y = room.getFloat("PlayerSpawnY");
                 player.currentHealth -= 1;
+                player.filled = false;
 
                 // Respawn Enemies
                 AspectSubscriptionManager asm = world.getAspectSubscriptionManager();
@@ -219,6 +220,7 @@ public class Room extends GameScreen implements Screen  {
                 playerCollider.rect.x = room.getFloat("PlayerSpawnX");
                 playerCollider.rect.y = room.getFloat("PlayerSpawnY");
                 player.currentHealth = player.maxHealth;
+                player.filled = false;
 
                 // Respawn Enemies
                 AspectSubscriptionManager asm = world.getAspectSubscriptionManager();
@@ -294,6 +296,7 @@ public class Room extends GameScreen implements Screen  {
 
         world.getSystem(PlayerHudSystem.class).resize(width, height);
     }
+
     @Override
     public void dispose() {
         super.dispose();
