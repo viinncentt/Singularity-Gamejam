@@ -29,11 +29,30 @@ public class CameraHandler extends IteratingSystem {
     protected void process(int entityId) {
         Player player = playerMapper.get(entityId);
         Collider collider = colliderMapper.get(entityId);
+        float centerX = collider.rect.x + collider.rect.width / 2f;
+        float centerY = collider.rect.y + collider.rect.height / 2f;
 
         float lerpFactor = MathUtils.clamp(5f * world.getDelta(), 0f, 1f);
-        camera.position.x = MathUtils.lerp(camera.position.x, collider.rect.x, lerpFactor);
-        camera.position.y = MathUtils.lerp(camera.position.y, collider.rect.y, lerpFactor);
-        camera.update();
+        camera.position.x = MathUtils.lerp(camera.position.x, centerX, lerpFactor);
+        camera.position.y = MathUtils.lerp(camera.position.y, centerY, lerpFactor);
 
+    }
+
+    private float x;
+    private float y;
+
+    private boolean isInitialized;
+
+    public void lock() {
+        if (!isInitialized) {
+            x = camera.position.x;
+            y = camera.position.y;
+
+            isInitialized = true;
+        }
+
+        // Set position
+        camera.position.x = x;
+        camera.position.y = y;
     }
 }

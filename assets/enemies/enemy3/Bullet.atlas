@@ -1,12 +1,12 @@
 Bullet.png
-size: 192, 64
+size: 198, 66
 format: RGBA8888
 filter: Linear, Linear
 repeat: none
 pma: false
 blueboyandprojectile5
-  bounds: 0, 0, 64, 64
+  bounds: 1, 1, 64, 64
 blueboyandprojectile6
-  bounds: 64, 0, 64, 64
+  bounds: 67, 1, 64, 64
 blueboyandprojectile7
-  bounds: 128, 0, 64, 64
+  bounds: 133, 1, 64, 64

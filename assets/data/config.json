@@ -57,5 +57,6 @@
   "BlueUndefinedMassShootingRange": "10",
   "BlueUndefinedMassShootingCooldown": "1",
   "BlueUndefinedMassProjectileSpeed": "5",
-  "BlueUndefinedMassProjectileAmount": "5"
+  "BlueUndefinedMassProjectileAmount": "5",
+  "ProjectileAnimationSpeed": "5"
 }

@@ -125,8 +125,8 @@ public class EnemyAISystem extends IteratingSystem {
         float vx = length != 0f ? (dx / length) * enemy.projectileSpeed : enemy.projectileSpeed;
         float vy = length != 0f ? (dy / length) * enemy.projectileSpeed : 0f;
 
-        float spawnX = enemyCollider.rect.x;
-        float spawnY = enemyCollider.rect.y;
+        float spawnX = enemyCollider.rect.x + enemyCollider.rect.width / 2f;
+        float spawnY = enemyCollider.rect.y + enemyCollider.rect.height / 2f;
 
         int projectileId = world.create();
         EntityEdit edit = world.edit(projectileId);
@@ -139,6 +139,8 @@ public class EnemyAISystem extends IteratingSystem {
         projectile.spawnY = spawnY;
         projectile.maxDistance = enemy.projectileMaxDistance;
         projectile.damage = 1;
+
+        Animator animator = edit.create(Animator.class);
 
         RigidBody rb = edit.create(RigidBody.class);
         rb.velocity.x = vx;

@@ -40,6 +40,8 @@ import at.vl.systems.EnemyAnimationSystem;
 import at.vl.systems.EnemyRenderSystem;
 import at.vl.systems.GravitySystem;
 import at.vl.systems.MovementSystem;
+import at.vl.systems.ProjectileAnimationSystem;
+import at.vl.systems.ProjectileRenderSystem;
 import at.vl.systems.ProjectileSystem;
 import at.vl.systems.SpawningSystem;
 import at.vl.systems.UndefinedMassType;
@@ -77,11 +79,13 @@ public class Room extends GameScreen implements Screen  {
         super(main);
 
         config = new WorldConfigurationBuilder().with(
+            new ProjectileSystem(), new ProjectileAnimationSystem(), new ProjectileRenderSystem(batch),
             new PlayerInputSystem(), new PlayerAnimationSystem(), new PlayerRenderSystem(batch),
             new EnemyAISystem(), new EnemyAnimationSystem(), new EnemyRenderSystem(batch),
             new MovementSystem(), new SpawningSystem(),
-            new CollisionSystem(), new GravitySystem(),  new DebugOverlay(), new PlayerHudSystem(), new ProjectileSystem(),
-            new CameraHandler(camera)
+
+            new CollisionSystem(), new GravitySystem(),  new DebugOverlay(),
+            new CameraHandler(camera), new PlayerHudSystem()
         ).build();
 
         world = new World(config);
@@ -152,6 +156,7 @@ public class Room extends GameScreen implements Screen  {
         renderer.render();
 
         // Draw
+        batch.setProjectionMatrix(camera.combined);
         batch.begin();
         world.process();
         batch.end();
@@ -164,7 +169,7 @@ public class Room extends GameScreen implements Screen  {
             Collider playerCollider = colliderMapper.get(playerId);
 
             if (playerCollider.rect.overlaps(
-                new Rectangle(room.getFloat("EndPointX"), room.getFloat("EndPointY"), 1f, 1f))) {
+                new Rectangle(room.getFloat("EndPointX"), room.getFloat("EndPointY"), 1f, 10f))) {
                 nextRoom = true;
             }
         }
@@ -180,7 +185,28 @@ public class Room extends GameScreen implements Screen  {
                 playerCollider.rect.x = room.getFloat("PlayerSpawnX");
                 playerCollider.rect.y = room.getFloat("PlayerSpawnY");
                 player.currentHealth -= 1;
+
+                // Respawn Enemies
+                AspectSubscriptionManager asm = world.getAspectSubscriptionManager();
+                EntitySubscription subscription = asm.get(Aspect.all(Enemy.class));
+                IntBag entities = subscription.getEntities();
+
+                int[] ids = entities.getData();
+                for (int i = 0, s = entities.size(); i < s; i++) {
+                    world.delete(ids[i]);
+                }
+
+                JsonValue enemies = room.get("Enemies");
+                if (enemies != null) {
+                    for (JsonValue enemy = enemies.child; enemy != null; enemy = enemy.next) {
+                        if (enemy.getString("EnemyType").equals("UndefinedMass")) {
+                            UndefinedMassType type = UndefinedMassType.valueOf(enemy.getString("Type"));
+                            spawner.spawnUndefinedMass(enemy.getFloat("X"), enemy.getFloat("Y"), type);
+                        }
+                    }
+                }
             }
+
         }
 
         // Dies
@@ -216,6 +242,12 @@ public class Room extends GameScreen implements Screen  {
             }
         }
 
+        // Camera reaches end
+        Rectangle cameraRect = new Rectangle(camera.position.x, camera.position.y, camera.viewportWidth, camera.viewportHeight);
+        if (cameraRect.overlaps(new Rectangle(room.getFloat("CameraEnd"), 6, 1, 100))) {
+            world.getSystem(CameraHandler.class).lock();
+        }
+
         if (nextRoom) {
             main.setScreen(new Room(main, roomNumber + 1));
         }
@@ -246,7 +278,7 @@ public class Room extends GameScreen implements Screen  {
             }
         }
 
-       // colliderRenderer.render();
+       colliderRenderer.render();
     }
 
     @Override

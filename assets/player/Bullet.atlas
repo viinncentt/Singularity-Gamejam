@@ -1,0 +1,15 @@
+Bullet.png
+size: 126, 42
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+pma: false
+blueboyandprojectile5
+  bounds: 1, 1, 34, 40
+  offsets: 15, 15, 64, 64
+blueboyandprojectile6
+  bounds: 37, 1, 42, 38
+  offsets: 9, 15, 64, 64
+blueboyandprojectile7
+  bounds: 81, 1, 44, 34
+  offsets: 9, 19, 64, 64

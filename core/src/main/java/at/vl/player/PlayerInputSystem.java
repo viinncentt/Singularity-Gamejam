@@ -381,7 +381,9 @@ public class PlayerInputSystem extends IteratingSystem {
             } else {
                 suckingTimer = 0f;
                 if (suckingTargetId != -1) {
-                    rigidBodyMapper.get(suckingTargetId).isBeingSucked = false;
+                    if (rigidBodyMapper.get(suckingTargetId) != null) {
+                        rigidBodyMapper.get(suckingTargetId).isBeingSucked = false;
+                    }
                     suckingTargetId = -1;
                 }
             }
@@ -467,7 +469,6 @@ public class PlayerInputSystem extends IteratingSystem {
                 requireSpaceRelease = true;
                 break;
             case DOWN:
-                System.out.println("works");
                 rb.velocity.y = upwardDashStrength;
                 filled = false;
                 wasJumpPressed = true;

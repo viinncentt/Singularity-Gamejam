@@ -36,7 +36,6 @@ public class ProjectileSystem extends IteratingSystem {
         float dy = collider.rect.y - projectile.spawnY;
         float traveled = (float) Math.sqrt(dx * dx + dy * dy);
         if (traveled >= projectile.maxDistance) {
-            world.deleteEntity(world.getEntity(entityId));
             world.delete(entityId);
             return;
         }
@@ -52,7 +51,7 @@ public class ProjectileSystem extends IteratingSystem {
             Player player = playerMapper.get(playerId);
             player.currentHealth -= 1;
             player.hurting = true;
-            world.deleteEntity(world.getEntity(entityId));
+            world.delete(entityId);
         }
     }
 }
