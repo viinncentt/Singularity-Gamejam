@@ -43,6 +43,7 @@ public class SpawningSystem extends BaseSystem {
         // Animator
         Animator animator = edit.create(Animator.class);
         animator.currentState = State.IDLE;
+        animator.hurtingTime = JsonHelper.getConfigValue().getFloat("PlayerHurtLength");
 
         // Facing
         Facing facing = edit.create(Facing.class);

@@ -1,6 +1,7 @@
 package at.vl.levels;
 
 import com.artemis.Aspect;
+import com.artemis.AspectSubscriptionManager;
 import com.artemis.ComponentMapper;
 import com.artemis.EntitySubscription;
 import com.artemis.World;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -24,6 +26,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import at.vl.Main;
 import at.vl.collisionsystem.CollisionSystem;
 import at.vl.ecs.components.Collider;
+import at.vl.ecs.components.Enemy;
 import at.vl.ecs.components.Player;
 import at.vl.ecs.debugging.ColliderRenderer;
 import at.vl.ecs.debugging.DebugOverlay;
@@ -31,6 +34,7 @@ import at.vl.player.PlayerAnimationSystem;
 import at.vl.player.PlayerHudSystem;
 import at.vl.player.PlayerInputSystem;
 import at.vl.player.PlayerRenderSystem;
+import at.vl.systems.CameraHandler;
 import at.vl.systems.EnemyAISystem;
 import at.vl.systems.EnemyAnimationSystem;
 import at.vl.systems.EnemyRenderSystem;
@@ -76,7 +80,8 @@ public class Room extends GameScreen implements Screen  {
             new PlayerInputSystem(), new PlayerAnimationSystem(), new PlayerRenderSystem(batch),
             new EnemyAISystem(), new EnemyAnimationSystem(), new EnemyRenderSystem(batch),
             new MovementSystem(), new SpawningSystem(),
-            new CollisionSystem(), new GravitySystem(),  new DebugOverlay(), new PlayerHudSystem(), new ProjectileSystem()
+            new CollisionSystem(), new GravitySystem(),  new DebugOverlay(), new PlayerHudSystem(), new ProjectileSystem(),
+            new CameraHandler(camera)
         ).build();
 
         world = new World(config);
@@ -188,6 +193,26 @@ public class Room extends GameScreen implements Screen  {
                 playerCollider.rect.x = room.getFloat("PlayerSpawnX");
                 playerCollider.rect.y = room.getFloat("PlayerSpawnY");
                 player.currentHealth = player.maxHealth;
+
+                // Respawn Enemies
+                AspectSubscriptionManager asm = world.getAspectSubscriptionManager();
+                EntitySubscription subscription = asm.get(Aspect.all(Enemy.class));
+                IntBag entities = subscription.getEntities();
+
+                int[] ids = entities.getData();
+                for (int i = 0, s = entities.size(); i < s; i++) {
+                    world.delete(ids[i]);
+                }
+
+                JsonValue enemies = room.get("Enemies");
+                if (enemies != null) {
+                    for (JsonValue enemy = enemies.child; enemy != null; enemy = enemy.next) {
+                        if (enemy.getString("EnemyType").equals("UndefinedMass")) {
+                            UndefinedMassType type = UndefinedMassType.valueOf(enemy.getString("Type"));
+                            spawner.spawnUndefinedMass(enemy.getFloat("X"), enemy.getFloat("Y"), type);
+                        }
+                    }
+                }
             }
         }
 
@@ -236,4 +261,5 @@ public class Room extends GameScreen implements Screen  {
         shapeRenderer.dispose();
         world.dispose();
     }
+
 }

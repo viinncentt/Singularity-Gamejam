@@ -12,6 +12,7 @@
   "PlayerWalkingAnimationSpeed": "10",
   "PlayerDyingAnimationSpeed": "5",
   "PlayerKnockbackDuration": "0.5",
+  "PlayerHurtLength": "0.1",
 
   "BaseJumpForce": "3",
   "MaxJumpForce": "7",

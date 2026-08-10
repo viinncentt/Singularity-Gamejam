@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
 import at.vl.Main;
+import at.vl.ecs.State;
 import at.vl.ecs.components.Animator;
 
 import at.vl.ecs.components.Collider;
@@ -41,6 +42,7 @@ public class PlayerAnimationSystem extends IteratingSystem {
     private final Animation<TextureRegion> SHOOTING_ANIMATION;
     private final Animation<TextureRegion> SUCKINGPARTICLES_ANIMATION;
     private final Animation<TextureRegion> DYING_ANIMATION;
+    private final TextureRegion HURTING_ANIMATION;
 
     public PlayerAnimationSystem() {
         super(Aspect.all(Player.class, Collider.class, RigidBody.class, Animator.class, Facing.class));
@@ -86,6 +88,10 @@ public class PlayerAnimationSystem extends IteratingSystem {
         atlas = new TextureAtlas(Gdx.files.internal("player/Death.atlas"));
         frames = atlas.getRegions();
         DYING_ANIMATION = new Animation<>(1f / JsonHelper.getConfigValue().getFloat("PlayerDyingAnimationSpeed") , frames, Animation.PlayMode.NORMAL);
+
+        // Hurting
+        temp = new Texture(Gdx.files.internal("player/PlayerHurt.png"));
+        HURTING_ANIMATION = new TextureRegion(temp);
     }
 
     @Override
@@ -99,6 +105,10 @@ public class PlayerAnimationSystem extends IteratingSystem {
         animator.stateTime += world.getDelta();
         animator.effectsFrame = null;
         player.readyToRespawn = false;
+
+        if (player.hurting) {
+           animator.currentState = State.HURTING;
+        }
 
         switch (animator.currentState) {
             case IDLE:
@@ -140,6 +150,16 @@ public class PlayerAnimationSystem extends IteratingSystem {
                 if (DYING_ANIMATION.isAnimationFinished(animator.dyingStateTime)) {
                    animator.dyingStateTime = 0f;
                    player.readyToRespawn = true;
+                }
+                break;
+
+            case HURTING:
+                if (animator.hurtingTimer <= animator.hurtingTime) {
+                    animator.hurtingTimer += world.getDelta();
+                    animator.currentFrame = HURTING_ANIMATION;
+                } else {
+                    animator.hurtingTimer = 0f;
+                    player.hurting = false;
                 }
                 break;
 

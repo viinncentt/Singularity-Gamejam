@@ -9,4 +9,5 @@ public class Player extends Component {
     public int maxHealth;
     public boolean readyToRespawn;
     public boolean dying;
+    public boolean hurting;
 }

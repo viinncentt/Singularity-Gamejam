@@ -100,6 +100,7 @@ public class EnemyAISystem extends IteratingSystem {
                 rb.velocity.y = 0;
                 if (!enemy.hasDealtDamage) {
                     player.currentHealth -= 1;
+                    player.hurting = true;
                     enemy.hasDealtDamage = true;
                     playerRb.velocity.x = direction * enemy.knockbackStrength;
                     playerRb.knockedBack = true;

@@ -51,6 +51,7 @@ public class ProjectileSystem extends IteratingSystem {
         if (collider.rect.overlaps(playerCollider.rect)) {
             Player player = playerMapper.get(playerId);
             player.currentHealth -= 1;
+            player.hurting = true;
             world.deleteEntity(world.getEntity(entityId));
         }
     }

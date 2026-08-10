@@ -11,4 +11,7 @@ public class Animator extends Component {
     public float stateTime;
     public TextureRegion effectsFrame;
     public float dyingStateTime;
+
+    public float hurtingTimer = 0f;
+    public float hurtingTime;
 }
