@@ -126,6 +126,9 @@ public class Room extends GameScreen implements Screen  {
         colliderMapper = world.getMapper(Collider.class);
         playerMapper = world.getMapper(Player.class);
 
+        // Bounds
+        world.getSystem(CameraHandler.class).setBounds(0f, room.getFloat("CameraEnd"));
+
         // Debugging
         shapeRenderer = new ShapeRenderer();
         colliderRenderer = new ColliderRenderer(world, camera, shapeRenderer);
@@ -242,17 +245,6 @@ public class Room extends GameScreen implements Screen  {
                     }
                 }
             }
-        }
-
-        // Camera reaches end
-        Rectangle cameraRect = new Rectangle(camera.position.x, camera.position.y, camera.viewportWidth, camera.viewportHeight);
-        if (cameraRect.overlaps(new Rectangle(room.getFloat("CameraEnd"), 6, 1, 100))) {
-            world.getSystem(CameraHandler.class).lock();
-        }
-
-        // Camera reaches Bottom
-        if (cameraRect.overlaps(new Rectangle(0, 4, 1000, 1))) {
-            world.getSystem(CameraHandler.class).lock();
         }
 
         if (nextRoom) {
