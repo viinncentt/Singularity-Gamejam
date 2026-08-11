@@ -109,7 +109,7 @@
   "Room4": {
     "TiledMap": "ROOM4.tmx",
     "PlayerSpawnX": "3",
-    "PlayerSpawnY": "4",
+    "PlayerSpawnY": "5",
     "EndPointX": "99",
     "EndPointY": "7",
     "CameraEnd": "101",
@@ -157,7 +157,7 @@
   "Room5": {
     "TiledMap": "ROOM5.tmx",
     "PlayerSpawnX": "3",
-    "PlayerSpawnY": "4",
+    "PlayerSpawnY": "5",
     "EndPointX": "99",
     "EndPointY": "12",
     "CameraEnd": "250",
