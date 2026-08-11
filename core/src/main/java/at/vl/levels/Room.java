@@ -191,11 +191,16 @@ public class Room extends GameScreen implements Screen  {
             Player player = playerMapper.get(playerId);
 
             if (playerCollider.rect.overlaps(
-                new Rectangle(0, 0, 100f, 1f))) {
+                new Rectangle(-20, 0, 1000f, 1f))) {
+                player.currentHealth -= 1;
+
+                if (player.currentHealth <= 0) {
+                    player.dying = true;
+                }
+
+                player.filled = false;
                 playerCollider.rect.x = room.getFloat("PlayerSpawnX");
                 playerCollider.rect.y = room.getFloat("PlayerSpawnY");
-                player.currentHealth -= 1;
-                player.filled = false;
 
                 // Respawn Enemies
                 AspectSubscriptionManager asm = world.getAspectSubscriptionManager();
@@ -227,10 +232,12 @@ public class Room extends GameScreen implements Screen  {
             Player player = playerMapper.get(playerId);
 
             if (player.readyToRespawn) {
+                System.out.println("triggered");
                 playerCollider.rect.x = room.getFloat("PlayerSpawnX");
                 playerCollider.rect.y = room.getFloat("PlayerSpawnY");
                 player.currentHealth = player.maxHealth;
                 player.filled = false;
+                player.dying = false;
 
                 // Respawn Enemies
                 AspectSubscriptionManager asm = world.getAspectSubscriptionManager();
@@ -298,6 +305,11 @@ public class Room extends GameScreen implements Screen  {
         fitViewport.update(width, height, true);
 
         world.getSystem(PlayerHudSystem.class).resize(width, height);
+    }
+
+    @Override
+    public void hide() {
+        music.stop();
     }
 
     @Override

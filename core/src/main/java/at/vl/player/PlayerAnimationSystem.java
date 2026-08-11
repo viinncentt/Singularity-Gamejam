@@ -106,8 +106,10 @@ public class PlayerAnimationSystem extends IteratingSystem {
         animator.effectsFrame = null;
         player.readyToRespawn = false;
 
-        if (player.hurting) {
-           animator.currentState = State.HURTING;
+        if (player.dying) {
+            animator.currentState = State.DYING;
+        } else if (player.hurting) {
+            animator.currentState = State.HURTING;
         }
 
         switch (animator.currentState) {
