@@ -6,6 +6,8 @@ import com.artemis.EntityEdit;
 import com.artemis.EntitySubscription;
 import com.artemis.systems.IteratingSystem;
 import com.artemis.utils.IntBag;
+import com.badlogic.gdx.math.Rectangle;
+
 import at.vl.ecs.State;
 import at.vl.ecs.components.Animator;
 import at.vl.ecs.components.Collider;
@@ -37,6 +39,8 @@ public class EnemyAISystem extends IteratingSystem {
         projectileSubscription = world.getAspectSubscriptionManager().get(Aspect.all(Projectile.class, Collider.class));
     }
 
+    private final Rectangle attackBoundsScratch = new Rectangle();
+
     @Override
     protected void process(int entityId) {
         Enemy enemy = enemyMapper.get(entityId);
@@ -62,7 +66,15 @@ public class EnemyAISystem extends IteratingSystem {
         float dy = playerCollider.rect.y - collider.rect.y;
         float distance = (float) Math.sqrt(dx * dx + dy * dy);
 
-        if (distance <= enemy.detectionRadius) {
+        attackBoundsScratch.set(
+            collider.rect.x - 0.01f,
+            collider.rect.y - 0.01f,
+            collider.rect.width + 0.02f,
+            collider.rect.height + 0.02f
+        );
+        boolean overlapping = attackBoundsScratch.overlaps(playerCollider.rect);
+
+        if (distance <= enemy.detectionRadius || overlapping) {
             float direction = Math.signum(dx);
             if (direction != 0f) {
                 enemy.lastDirection = direction;
@@ -94,7 +106,7 @@ public class EnemyAISystem extends IteratingSystem {
                 }
             }
 
-            if (distance <= enemy.attackRange) {
+            if (distance <= enemy.attackRange || overlapping) {
                 if (player.dying) return;
                 animator.currentState = State.ATTACKING;
                 rb.velocity.y = 0;
