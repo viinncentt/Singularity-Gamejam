@@ -112,7 +112,7 @@
     "PlayerSpawnY": "6",
     "EndPointX": "99",
     "EndPointY": "7",
-    "CameraEnd": "101",
+    "CameraEnd": "100",
     "Enemies": [
       {
         "EnemyType": "UndefinedMass",
@@ -160,7 +160,7 @@
     "PlayerSpawnY": "7",
     "EndPointX": "99",
     "EndPointY": "12",
-    "CameraEnd": "101",
+    "CameraEnd": "100",
     "Enemies": [
       {
         "EnemyType": "UndefinedMass",
@@ -195,13 +195,13 @@
       {
         "EnemyType": "UndefinedMass",
         "X": "45",
-        "Y": "17",
+        "Y": "19",
         "Type": "BLUE"
       },
       {
         "EnemyType": "UndefinedMass",
         "X": "52",
-        "Y": "18",
+        "Y": "20",
         "Type": "BLUE"
       },
       {
