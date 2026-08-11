@@ -164,19 +164,19 @@
     "Enemies": [
       {
         "EnemyType": "UndefinedMass",
-        "X": "9",
-        "Y": "6",
+        "X": "12",
+        "Y": "12",
         "Type": "NORMAL"
       },
       {
         "EnemyType": "UndefinedMass",
         "X": "13",
-        "Y": "13",
+        "Y": "18",
         "Type": "BLUE"
       },
       {
         "EnemyType": "UndefinedMass",
-        "X": "18",
+        "X": "23",
         "Y": "10",
         "Type": "NORMAL"
       },
