@@ -10,6 +10,7 @@ import com.artemis.WorldConfigurationBuilder;
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayer;
@@ -75,6 +76,8 @@ public class Room extends GameScreen implements Screen  {
     private final float fadeDuration;
     private boolean fading = true;
 
+    private Music music;
+
     public Room(Main main, int roomNumber) {
         super(main);
 
@@ -127,6 +130,11 @@ public class Room extends GameScreen implements Screen  {
 
         // Bounds
         world.getSystem(CameraHandler.class).setBounds(0f, room.getFloat("CameraEnd"));
+
+        // Music
+        music = Gdx.audio.newMusic(Gdx.files.internal("music/theme.mp3"));
+        music.setLooping(true);
+        music.play();
 
         // Debugging
         shapeRenderer = new ShapeRenderer();
