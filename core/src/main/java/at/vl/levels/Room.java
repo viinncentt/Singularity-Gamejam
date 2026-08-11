@@ -194,33 +194,34 @@ public class Room extends GameScreen implements Screen  {
                 new Rectangle(-20, 0, 1000f, 1f))) {
                 player.currentHealth -= 1;
 
-                if (player.currentHealth <= 0) {
+                if (!(player.currentHealth <= 0)) {
+                    player.filled = false;
+                    playerCollider.rect.x = room.getFloat("PlayerSpawnX");
+                    playerCollider.rect.y = room.getFloat("PlayerSpawnY");
+
+                    // Respawn Enemies
+                    AspectSubscriptionManager asm = world.getAspectSubscriptionManager();
+                    EntitySubscription subscription = asm.get(Aspect.all(Enemy.class));
+                    IntBag entities = subscription.getEntities();
+
+                    int[] ids = entities.getData();
+                    for (int i = 0, s = entities.size(); i < s; i++) {
+                        world.delete(ids[i]);
+                    }
+
+                    JsonValue enemies = room.get("Enemies");
+                    if (enemies != null) {
+                        for (JsonValue enemy = enemies.child; enemy != null; enemy = enemy.next) {
+                            if (enemy.getString("EnemyType").equals("UndefinedMass")) {
+                                UndefinedMassType type = UndefinedMassType.valueOf(enemy.getString("Type"));
+                                spawner.spawnUndefinedMass(enemy.getFloat("X"), enemy.getFloat("Y"), type);
+                            }
+                        }
+                    }
+                } else {
                     player.dying = true;
                 }
 
-                player.filled = false;
-                playerCollider.rect.x = room.getFloat("PlayerSpawnX");
-                playerCollider.rect.y = room.getFloat("PlayerSpawnY");
-
-                // Respawn Enemies
-                AspectSubscriptionManager asm = world.getAspectSubscriptionManager();
-                EntitySubscription subscription = asm.get(Aspect.all(Enemy.class));
-                IntBag entities = subscription.getEntities();
-
-                int[] ids = entities.getData();
-                for (int i = 0, s = entities.size(); i < s; i++) {
-                    world.delete(ids[i]);
-                }
-
-                JsonValue enemies = room.get("Enemies");
-                if (enemies != null) {
-                    for (JsonValue enemy = enemies.child; enemy != null; enemy = enemy.next) {
-                        if (enemy.getString("EnemyType").equals("UndefinedMass")) {
-                            UndefinedMassType type = UndefinedMassType.valueOf(enemy.getString("Type"));
-                            spawner.spawnUndefinedMass(enemy.getFloat("X"), enemy.getFloat("Y"), type);
-                        }
-                    }
-                }
             }
 
         }
