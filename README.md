@@ -4,6 +4,8 @@ Game my cousin and I made for the [Interstellar Game jam](https://itch.io/jam/in
 
 Playable at: [gabiskibidi.itch.io/singulajohnny](https://gabiskibidi.itch.io/singulajohnny)
 
+![Singularity Gamejam](gameplay/
+
 [Full wakatime project](https://wakatime.com/@704ec189-b218-4e9d-ab79-767ef832c5b6/projects/mkpcfliijn?start=2026-08-11&end=2026-08-17)
 
 [![wakatime](https://wakatime.com/badge/user/704ec189-b218-4e9d-ab79-767ef832c5b6/project/2bf76223-9c4c-4f17-9dc4-4e827482babd.svg)](https://wakatime.com/badge/user/704ec189-b218-4e9d-ab79-767ef832c5b6/project/2bf76223-9c4c-4f17-9dc4-4e827482babd)
