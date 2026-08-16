@@ -2,7 +2,7 @@
 
 Game my cousin and I made for the [Interstellar Game jam](https://itch.io/jam/interstellar-game-jam-9). Made using LibGDX, all programming was done by me. 
 
-[![wakatime](https://wakatime.com/badge/user/704ec189-b218-4e9d-ab79-767ef832c5b6/project/c473e777-2162-49d1-9ac6-5263572aaba0.svg)](https://wakatime.com/badge/user/704ec189-b218-4e9d-ab79-767ef832c5b6/project/c473e777-2162-49d1-9ac6-5263572aaba0)
+[![wakatime](https://wakatime.com/badge/user/704ec189-b218-4e9d-ab79-767ef832c5b6/project/2bf76223-9c4c-4f17-9dc4-4e827482babd.svg)](https://wakatime.com/badge/user/704ec189-b218-4e9d-ab79-767ef832c5b6/project/2bf76223-9c4c-4f17-9dc4-4e827482babd)
 
 ![Java](https://img.shields.io/badge/Java-17-orange)
 ![LibGDX](https://img.shields.io/badge/LibGDX-Game-red)
