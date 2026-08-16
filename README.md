@@ -1,8 +1,8 @@
 # Singularity-GameJam
 
-Game my cousin and I made for the [Interstellar Game jam](https://itch.io/jam/interstellar-game-jam-9). Made using LibGDX, all programming was done by me. 
+Game my cousin and I made for the [Interstellar Game jam](https://itch.io/jam/interstellar-game-jam-9). Made using LibGDX, all programming was done by me. While my cousin made all the art and music.
 
-Playable at: https://gabiskibidi.itch.io/singulajohnny
+Playable at: [gabiskibidi.itch.io/singulajohnny](https://gabiskibidi.itch.io/singulajohnny)
 
 [Full wakatime project](https://wakatime.com/@704ec189-b218-4e9d-ab79-767ef832c5b6/projects/mkpcfliijn?start=2026-08-11&end=2026-08-17)
 
