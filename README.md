@@ -6,8 +6,8 @@ Playable at: [gabiskibidi.itch.io/singulajohnny](https://gabiskibidi.itch.io/sin
 
 <table>
 <tr>
-<td><img src="gameplay/image1.png" alt="Gameplay screenshot 1" width="350" /></td>
-<td><img src="gameplay/image2.png" alt="Gameplay screenshot 2" width="350" /></td>
+<td><img src="gameplay/image1.png" alt="Gameplay screenshot 1" width="500" /></td>
+<td><img src="gameplay/image2.png" alt="Gameplay screenshot 2" width="500" /></td>
 </tr>
 </table>
 
